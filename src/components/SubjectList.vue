@@ -1,23 +1,26 @@
 <template>
   <div class="subject-list">
     <div class="module">
-      <h3 class="module__title">title</h3>
+      <h3 class="module__title">动画</h3>
       <ul class="module__items">
         <li class="subject"
-            v-for="item in list">
-          <div class="subject__poster"></div>
+            v-for="item in list"
+            :key="item.id"
+            @click="enter(item.id)">
+          <div class="subject__poster"
+               :style="{ backgroundImage: `url(${item.images ? (item.images.large || item.images.common || '') : ''})` }"></div>
           <div class="subject__infos">
             <div class="subject__title">
-              <span class="subject__name--cn">cnName</span>
-              <span class="subject__name">name</span>
+              <span class="subject__name--cn">{{ item.name_cn || '' }}</span>
+              <span class="subject__name">{{ item.name || '' }}</span>
             </div>
             <div class="subject__keywords">
-              keywords
+              {{ item.summary }}
             </div>
             <div class="subject__rating"
                  v-if="item.rating">
               <Rate :num="item.rating.score"></Rate>
-              <span>{{ item.rating.total }}</span>
+              <span>{{ item.rating.total }}人</span>
             </div>
             <span class="subject__rank"
                   v-if="item.rank">{{ item.rank }}</span>
@@ -40,6 +43,10 @@ import Rate from './Rate.vue';
 export default class SubjectList extends Vue {
   @Prop({type: Array, default: [] }) private list!: Array<any>;
 
+  enter(id: number | string) {
+    this.$router.push(`/subject/${id}`);
+  }
+
   created() {
     console.log(this.list);
   }
@@ -49,39 +56,89 @@ export default class SubjectList extends Vue {
 <style lang="scss" scoped>
 $fontSize: 14px;
 
+.subject-list {
+  padding-top: 6px;
+}
+
+.module {
+  margin: 10px 0;
+  &__title {
+    padding: 5px;
+    font-size: 16px;
+    color: #555;
+    text-align: left;
+  }
+}
+
 .subject {
-  display: inline-block;
+  display: flex;
   vertical-align: top;
-  width: 100px;
-  margin: 4px;
+  width: 100vw;
+  padding-bottom: 8px;
+  margin: 0 4px 10px 4px;
+  border-bottom: 1px solid #e5e5e5;
   text-align: center;
   &__poster {
-    width: 100%;
-    height: 100px;
+    flex: 0 0 100px;
+    height: 140px;
     overflow: hidden;
     background-size: cover;
     background-position: center;
-    border: 2px solid pink;
+  }
+
+  &__infos {
+    position: relative;
+    flex: 1;
+    margin-left: 12px;
+    text-align: left;
   }
 
   &__title {
-    display: block;
+    text-align: left;
     max-width: 100%;
-    margin-top: 6px;
     font-size: $fontSize;
-    line-height: $fontSize;
+    line-height: 1.4em;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     word-wrap: normal;
+  }
+
+  &__name {
+    display: block;
+    font-size: 14px;
+    color: #ccc;
+  }
+
+  &__name--cn {
+    display: block;
+    font-size: 16px;
     color: #111;
   }
 
+  &__keywords {
+    margin: 8px 0;
+    max-height: 3em;
+    overflow: hidden;
+  }
+
   &__rating {
-    margin-top: 6px;
     font-size: 12px;
     line-height: 14px;
     color: #aaa;
+  }
+
+  &__rank {
+    position: absolute;
+    top: 0;
+    right: 12px;
+    width: 40px;
+    height: 18px;
+    border-radius: 4px;
+    line-height: 18px;
+    text-align: center;
+    color: #fff;
+    background: pink;
   }
 }
 </style>

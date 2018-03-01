@@ -1,11 +1,11 @@
 <template>
-  <section class="container">
+  <section class="weekday-card">
     <header>
-      <h2 class="title">{{ title }}</h2>
+      <h2 class="weekday__title">{{ title }}</h2>
     </header>
     <div class="wrapper"
          ref="wrapper">
-      <ul class="content"
+      <ul class="weekday__content"
           :style="listStyles">
         <li v-for="(item, i) in calendar.items"
             :key="i"
@@ -44,7 +44,7 @@ export default class WeekdayCard extends Vue {
   }
 
   get listStyles() {
-    const width = this.calendar.items.length * 100 + 40;
+    const width = this.calendar.items.length * 100 + 140;
     return {
       width: width + 'px'
     }
@@ -55,6 +55,7 @@ export default class WeekdayCard extends Vue {
       const wrapper: Element = this.$refs.wrapper as Element;
       this.scroll = new BScroll(wrapper, {
         scrollX: true,
+        eventPassthrough: 'vertical',
         click: true
       });
     })
@@ -63,7 +64,7 @@ export default class WeekdayCard extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.weekday-card {
   margin: 0;
   overflow: hidden;
 }
@@ -72,7 +73,7 @@ header {
   border-left: 4px solid pink;
   text-align: left;
   margin: 0 0 15px;
-  .title {
+  .weekday__title {
     display: inline-block;
     min-width: 4em;
     margin: 0;
@@ -86,10 +87,10 @@ header {
 .wrapper {
   width: 100vw;
   height: 160px;
-  .content {
+  .weekday__content {
     position: relative;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
   }
 }
 </style>

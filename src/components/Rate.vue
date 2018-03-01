@@ -3,6 +3,7 @@
     <span v-for="i in 5"
           :key="i"
           class="star"
+          :style="styles"
           :class="starStatus(i, num)"></span>
   </div>
 </template>
@@ -14,6 +15,16 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 export default class Rate extends Vue {
   @Prop({ default: 10 })
   num!: number;
+  @Prop({ default: 10 })
+  size!: number;
+
+  get styles() {
+    return {
+      width: `${this.size}px`,
+      height: `${this.size}px`,
+      backgroundSize: `${this.size}px ${this.size}px`
+    }
+  }
 
   starStatus(pos: number, score: number): string {
     const num = 2 * pos;

@@ -1,11 +1,11 @@
 <template>
-  <div class="card"
+  <div class="item"
        @click="enter">
-    <div class="card__poster"
+    <div class="item__poster"
          :style="{ backgroundImage: `url(${image})` }">
     </div>
-    <span class="card__title">{{ subject.name_cn || subject.name }}</span>
-    <div class="card__rating">
+    <span class="item__title">{{ subject.name_cn || subject.name }}</span>
+    <div class="item__rating">
       <template v-if="score">
         <Rate :num="score"></Rate>
         <span class="rating__score">{{ score }}</span>
@@ -71,7 +71,7 @@ export default class SubjectItem extends Vue {
 <style lang="scss" scoped>
 $fontSize: 14px;
 
-.card {
+.item {
   display: inline-block;
   vertical-align: top;
   width: 100px;
