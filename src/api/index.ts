@@ -14,8 +14,12 @@ export default class Api {
    * @param {string} keywords
    *
    */
-  public static search(keywords: string): Promise<any>  {
-    return get(`/search/subject/${keywords}`);
+  public static async search(keywords: string): Promise<any> {
+    keywords = encodeURIComponent(keywords);
+    return get(`/search/subject/${keywords}`, {
+      type: 2,
+      responseGroup: 'large'
+    });
   }
   /**
    * 条目信息
@@ -23,7 +27,7 @@ export default class Api {
    * @param {(number | string)} id
    * @param {string} [responseGroup='small'] 
    */
-  public static getSubjectById(id: number | string, responseGroup: string = 'small'): Promise<any>  {
+  public static async getSubjectById(id: number | string, responseGroup: string = 'small'): Promise<any>  {
     return get(`/subject/${id}`, {
       responseGroup
     });
