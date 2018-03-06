@@ -88,7 +88,7 @@ $fontSize: 14px;
   &__title {
     display: block;
     max-width: 100%;
-    margin-top: 6px;
+    margin-top: 10px;
     font-size: $fontSize;
     line-height: $fontSize;
     overflow: hidden;
