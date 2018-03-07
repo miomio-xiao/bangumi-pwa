@@ -19,12 +19,19 @@
             <p>{{ subject.name_cn }}</p>
             <p>{{ subject.name }}</p>
           </div>
-          <span class="score">{{ score }}</span>
-          <div class="subject__rating">
-            <Rate :num="score"
-                  :size="16"></Rate>
-            <div class="total">{{ total }} 人评分</div>
+          <div @click="showSheet">    
+            <span class="score">{{ score }}</span>
+            <div class="subject__rating">
+              <Rate :num="score"
+                    :size="16"></Rate>
+              <div class="total">{{ total }} 人评分</div>
+            </div>
           </div>
+        </div>
+        <div class="subject__rank"
+              @click="showRank = !showRank"
+              v-if="subject.rank">
+          <span v-show="showRank">{{ subject.rank }}</span>
         </div>
       </div>
     </header>
@@ -33,10 +40,16 @@
       <p>{{ staffs }}</p>
       <div class="summary">
         <h3>剧情简介</h3>
-        <div class="content" v-html="subject.summary">
+        <div class="content" v-html="summary">
         </div>
       </div>
     </div>
+    <v-dialog v-model="showChart"
+              fullscreen transition="dialog-bottom-transition"
+              :overlay="false"
+              lazy>
+      <subject-chart :subject="subject"></subject-chart>
+    </v-dialog>
   </div>
   <div class="loading" v-else>
     <v-progress-circular indeterminate 
@@ -48,28 +61,21 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import Rate from '../components/Rate.vue';
+import SubjectChart from '../components/SubjectChart.vue';
 import api from '../api';
-
-type Subject = {
-  id: number,
-  name: string,
-  name_cn: string,
-  air_date: string,
-  rating: any,
-  images: any,
-  staff: Array<any>,
-  summary: string
-}
 
 @Component({
   components: {
-    Rate
+    Rate,
+    SubjectChart
   }
 })
 export default class Subjects extends Vue {
-  private subject!: Subject
-  private loading: boolean = false
-  private title: string = '详情'
+  private subject!: Subject;
+  private loading: boolean = false;
+  private showChart: boolean = false;
+  private showRank: boolean = false;
+  private title: string = '详情';
 
   get score() {
     if (this.subject.rating) {
@@ -86,11 +92,11 @@ export default class Subjects extends Vue {
   }
 
   get image() {
-    return this.subject.images.large;
+    return this.subject.images.large || '';
   }
 
   get staffs() {
-    const staffs:Array<any> = this.subject.staff;
+    const staffs = this.subject.staff;
     if (staffs && staffs.length > 0) {
       return staffs.map(staff => staff.name || staff.name_cn).join(' / ');
     } else {
@@ -98,10 +104,23 @@ export default class Subjects extends Vue {
     }
   }
 
+  get summary() {
+    let str: string = this.subject.summary || '';
+    return this.changeStr(str);
+  }
+
+  changeStr(str: string):string {
+    return str.replace(/\n|\r\n/g,"<br/>");
+  } 
+
   back() {
     this.$router.go(-1);
   }
-  
+
+  showSheet() {
+    this.showChart = true;
+  }
+
   async beforeRouterEach() {
     const id: string = this.$route.params.id;
     try {
@@ -133,6 +152,13 @@ export default class Subjects extends Vue {
   width: 100vw;
   min-height: 100vh;
   background: #fff;
+  & /deep/ {
+    .dialog--fullscreen {
+      height: 92%;
+      bottom: 0;
+      top: auto;
+    }
+  }
 }
 
 header {
@@ -187,6 +213,17 @@ header {
 
     &__rating {
       display: inline-block;
+    }
+
+    &__rank {
+      position: absolute;
+      top: 20px;
+      right: 16px;
+      width: 60px;
+      height: 40px;
+      font-size: 32px;
+      font-style: oblique;
+      color: #fff;
     }
 
     .total {

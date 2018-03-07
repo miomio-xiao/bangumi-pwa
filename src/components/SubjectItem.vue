@@ -90,7 +90,7 @@ $fontSize: 14px;
     max-width: 100%;
     margin-top: 10px;
     font-size: $fontSize;
-    line-height: $fontSize;
+    line-height: 1.2em;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

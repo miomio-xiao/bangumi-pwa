@@ -2,12 +2,13 @@ import Vue from 'vue';
 import Vuetify from 'vuetify';
 
 import ECharts from 'vue-echarts/components/ECharts.vue';
-// 手动引入 ECharts 各模块来减小打包体积
+// 鎵嬪姩寮曞叆 ECharts 鍚勬ā鍧楁潵鍑忓皬鎵撳寘浣撶Н
 import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/chart/pie';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
+import 'echarts/lib/component/title';
 import 'echarts/lib/theme/light'
 
 import App from './App.vue';

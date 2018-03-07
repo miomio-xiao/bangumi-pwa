@@ -8,14 +8,15 @@ export interface SubjectImages {
 
 export interface Subject {
   id: number;
-  type?: number | string;
+  type: number | string;
   name: string;
   name_cn?: string;
-  air_date?: string;
+  air_date: string;
   air_weekday?: string;
   rating?: any;
   rank?: number;
-  images?: SubjectImages;
+  images: SubjectImages;
   summary?: string;
-  url?: string;
+  staff?: Array<any>;
+  url: string;
 }

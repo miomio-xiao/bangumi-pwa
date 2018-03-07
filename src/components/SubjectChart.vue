@@ -1,5 +1,5 @@
 <template>
-  <figure class="chart-area">
+  <div class="chart-area">
     <chart :options="barOptions"
            :init-options="initOptions"
            theme="light"
@@ -10,14 +10,13 @@
            theme="light"
            ref="reviewChart"
            class="chart"></chart>
-  </figure>
+  </div>
 </template>
 
 <script lang="ts">
 import { Prop, Watch, Component, Vue } from 'vue-property-decorator';
 import { LinearGradient } from 'echarts/lib/util/graphic';
-
-import api from '@/api';
+import api from '../api';
 
 interface VECharts extends Element {
   showLoading: Function;
@@ -30,16 +29,11 @@ const reviewLegend = ['people', 'rank', 'score'];
 
 @Component
 export default class SubjectChart extends Vue {
-  subject: any;
+  @Prop() subject!: Subject;
 
-  private chartOpt: any;
-  private loading: boolean = false;
   private initOptions: Object = { renderer: 'svg' };
 
   private barOptions: Object = {
-    title: {
-      text: 'demo'
-    },
     color: ['#3398DB'],
     xAxis: {
       type: 'category',
@@ -50,8 +44,9 @@ export default class SubjectChart extends Vue {
     },
     yAxis: {
       type: 'value',
+      name: '评分人数(人)',
       axisLabel: {
-        formatter: '{value} r'
+        formatter: '{value}'
       }
     },
     series: [
@@ -85,9 +80,6 @@ export default class SubjectChart extends Vue {
   };
 
   private lineOptions: Object = {
-    title: {
-      text: 'line demo'
-    },
     tooltip: {
       trigger: 'axis'
     },
@@ -95,8 +87,8 @@ export default class SubjectChart extends Vue {
       data: reviewLegend
     },
     grid: {
-      left: '3%',
-      right: '4%',
+      left: '2%',
+      right: '2%',
       bottom: '3%',
       containLabel: true
     },
@@ -125,6 +117,7 @@ export default class SubjectChart extends Vue {
       {
         type: 'value',
         name: 'score',
+        offset: 10,
         axisLine: {
           show: false,
           lineStyle: {}
@@ -175,6 +168,13 @@ export default class SubjectChart extends Vue {
     ]
   };
 
+  get subText() {
+    if (this.subject.rank) {
+      return `Bangumi Anime Ranked: #${this.subject.rank}`;
+    }
+    return '';
+  }
+
   get rateData() {
     if (this.subject) {
       return this.subject.rating.count || {};
@@ -201,11 +201,16 @@ export default class SubjectChart extends Vue {
       deviations.map(square).reduce(sum) / (data.length - 1)
     );
 
+    const minAxis = Math.floor(min - stddev) > 0 ? Math.floor(min - stddev) : 0;
+    const maxAxis = Math.floor(max + stddev);
+
     return {
-      min: min,
-      max: max,
-      mean: mean,
-      stddev: stddev
+      min,
+      max,
+      minAxis,
+      maxAxis,
+      mean,
+      stddev
     };
   }
 
@@ -217,8 +222,8 @@ export default class SubjectChart extends Vue {
         color: '#E91E63',
         maskColor: 'rgba(255, 255, 255, 0.4)'
       });
-      const data = await api.getSubjectById(id);
-      this.subject = data;
+      // const data = await api.getSubjectById(id);
+      // this.subject = data;
       rate.hideLoading();
       rate.mergeOptions({
         series: [
@@ -251,16 +256,16 @@ export default class SubjectChart extends Vue {
         },
         yAxis: [
           {
-            min: Math.floor(rankRange.min - rankRange.stddev),
-            max: Math.ceil(rankRange.max + rankRange.stddev)
+            min: rankRange.minAxis || 1,
+            max: rankRange.maxAxis
           },
           {
-            min: Math.floor(scoreRange.min - scoreRange.stddev),
-            max: Math.ceil(scoreRange.max + scoreRange.stddev)
+            min: scoreRange.minAxis,
+            max: scoreRange.maxAxis
           },
           {
-            min: Math.floor(peopleRange.min - peopleRange.stddev),
-            max: Math.ceil(peopleRange.max + peopleRange.stddev)
+            min: peopleRange.minAxis,
+            max: peopleRange.maxAxis
           }
         ],
         series: [
@@ -293,6 +298,8 @@ export default class SubjectChart extends Vue {
 
 <style lang="scss">
 .chart-area {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.95);
   max-width: 100vw;
 }
 .chart {
