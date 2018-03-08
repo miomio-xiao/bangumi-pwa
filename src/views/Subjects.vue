@@ -284,7 +284,7 @@ header {
   &__item {
     height: 120px;
     margin-bottom: 10px;
-
+    line-height: 1.4em;
     & /deep/ .list__tile {
       height: 100%;
     }
