@@ -260,8 +260,8 @@ export default class SubjectChart extends Vue {
             max: rankRange.maxAxis
           },
           {
-            min: scoreRange.minAxis,
-            max: scoreRange.maxAxis
+            min: +(scoreRange.min - scoreRange.stddev).toFixed(2),
+            max: +(scoreRange.max + scoreRange.stddev).toFixed(2)
           },
           {
             min: peopleRange.minAxis,
