@@ -7,14 +7,20 @@
         <v-icon>arrow_back</v-icon>
       </v-btn>
       <v-text-field append-icon="search"
+                    class="input"
                     hide-details
-                    dark
                     single-line
                     v-model="keyword"
                     @input="change"
                     @keyup.enter="submit"></v-text-field>
     </v-toolbar>
-    <SubjectList v-if="list.length > 0"
+    <div class="loading"
+         v-if="loading">
+      <v-progress-circular indeterminate 
+                          :width="3" 
+                          color="pink"></v-progress-circular>
+    </div>
+    <SubjectList v-else-if="list.length > 0"
                  :list="list"></SubjectList>
     <div class="history"
          v-else-if="searchItems.length > 0 && !keyword">
@@ -48,12 +54,15 @@ export default class Search extends Vue {
   private keyword: string = '';
   private searchItems: Array<string> = [];
   private list: Array<any> = [];
+  private loading: boolean = false;
 
   @debounce(1000)
   async change() {
     const keyword = this.keyword;
+    this.loading = true;
     try {
       const data = await Api.search(keyword);
+      this.loading = false;
       if (data.list) {
         this.list = data.list;
       } else {
@@ -106,6 +115,9 @@ export default class Search extends Vue {
 
 <style lang="scss" scoped>
 .search-page {
+  .input {
+    color: #fff!important;
+  }
   .history {
     margin-top: 12px;
     &__hd {
