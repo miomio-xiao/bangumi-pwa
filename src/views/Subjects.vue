@@ -39,9 +39,31 @@
       <p>{{ subject.air_date }}</p>
       <p>{{ staffs }}</p>
       <div class="summary">
-        <h3>剧情简介</h3>
-        <div class="content" v-html="summary">
+        <h3 class="sub">剧情简介</h3>
+        <div class="content"
+             :class="{ more: !summaryMore }"
+             @click="summaryMore = !summaryMore"
+             v-html="summary">
         </div>
+      </div>
+      <div class="blog">
+        <h3 class="sub">评论</h3>
+        <v-list three-line class="blog__list">
+            <v-list-tile avatar v-for="(item, index) in subject.blog" :key="index" class="blog__item">
+              <v-list-tile-avatar>
+                <img :src="item.user.avatar.small">
+              </v-list-tile-avatar>
+              <v-list-tile-content @click="showBlogContent(item)">
+                <v-list-tile-title class="blog__title">{{ item.title }}</v-list-tile-title>
+                <v-list-tile-sub-title>
+                  by 
+                  <span class="blog__user">{{ item.user.nickname }}</span>
+                  <span class="blog__time">{{ item.dateline }}</span>
+                </v-list-tile-sub-title>
+                <div class="blog__content" v-html="item.summary"></div>
+              </v-list-tile-content>
+            </v-list-tile>
+        </v-list>
       </div>
     </div>
     <v-dialog v-model="showChart"
@@ -71,31 +93,32 @@ import api from '../api';
   }
 })
 export default class Subjects extends Vue {
-  private subject!: Subject;
+  private subject: Subject;
   private loading: boolean = false;
   private showChart: boolean = false;
   private showRank: boolean = false;
+  private summaryMore: boolean = false;
   private title: string = '详情';
 
-  get score() {
+  get score(): number {
     if (this.subject.rating) {
       return this.subject.rating.score || 0;
     }
     return 0;
   }
 
-  get total() {
+  get total(): number {
     if (this.subject.rating) {
       return this.subject.rating.total || 0;
     }
     return 0;
   }
 
-  get image() {
+  get image(): string {
     return this.subject.images.large || '';
   }
 
-  get staffs() {
+  get staffs(): string {
     const staffs = this.subject.staff;
     if (staffs && staffs.length > 0) {
       return staffs.map(staff => staff.name || staff.name_cn).join(' / ');
@@ -104,14 +127,14 @@ export default class Subjects extends Vue {
     }
   }
 
-  get summary() {
+  get summary(): string {
     let str: string = this.subject.summary || '';
     return this.changeStr(str);
   }
 
-  changeStr(str: string):string {
-    return str.replace(/\n|\r\n/g,"<br/>");
-  } 
+  changeStr(str: string): string {
+    return str.replace(/\n|\r\n/g, '<br/>');
+  }
 
   back() {
     this.$router.go(-1);
@@ -157,6 +180,7 @@ export default class Subjects extends Vue {
       height: 92%;
       bottom: 0;
       top: auto;
+      background: #fff;
     }
   }
 }
@@ -247,15 +271,68 @@ header {
   }
   .summary {
     margin-top: 12px;
-    h3 {
-      font-weight: normal;
-      padding: 0 0 10px;
-      color: #aaa;
-    }
     .content {
       font-size: 14px;
       line-height: 1.4em;
+      transition: 0.3s ease-in-out;
     }
+  }
+}
+
+.blog {
+  margin-top: 12px;
+  &__item {
+    height: 120px;
+    margin-bottom: 10px;
+
+    & /deep/ .list__tile {
+      height: 100%;
+    }
+  }
+
+  &__title {
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  &__user {
+    color: #bd4147;
+  }
+
+  &__time {
+    padding-left: 5px;
+    color: #ccc;
+  }
+
+  &__content {
+    display: -webkit-box;
+    white-space: normal;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    padding-top: 4px;
+    font-size: 14px;
+    color: #777;
+  }
+}
+
+.sub {
+  font-weight: normal;
+  padding: 0 0 10px;
+  color: #aaa;
+}
+
+.more {
+  position: relative;
+  max-height: 80px;
+  overflow: hidden;
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 25px;
+    background: linear-gradient(rgba(255, 255, 255, 0.001), #fff);
+    pointer-events: none;
   }
 }
 </style>
