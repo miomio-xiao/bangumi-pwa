@@ -20,15 +20,6 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import Rate from './Rate.vue';
 import api from '../api';
 
-type Subject = {
-  id: number,
-  name: string,
-  name_cn: string,
-  air_date: string,
-  rating: any,
-  images: any
-}
-
 @Component({
   components: {
     Rate
@@ -36,7 +27,7 @@ type Subject = {
 })
 export default class SubjectItem extends Vue {
   @Prop()
-  subject!: Subject
+  subject!: Types.ISubject
 
   get score() {
     if (this.subject.rating) {

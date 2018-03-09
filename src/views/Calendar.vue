@@ -25,11 +25,6 @@ import api from '../api';
 
 import WeekdayCard from '@/components/WeekdayCard.vue';
 
-type calendar = {
-  items: Array<Object>;
-  weekday: Object;
-};
-
 @Component({
   components: {
     WeekdayCard
@@ -37,12 +32,11 @@ type calendar = {
 })
 export default class Calendar extends Vue {
   private title: string = 'bangumi';
-  private calendars: Array<calendar> = [];
+  private calendars: Array<Types.ICalendar> = [];
 
   async created() {
     try {
       const data = await api.getCalendars();
-      console.log(data);
       this.calendars = data;
     } catch (error) {
       console.log(error);

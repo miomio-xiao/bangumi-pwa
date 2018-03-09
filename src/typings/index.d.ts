@@ -1,5 +1,4 @@
-import * as SubjectModel from './Subject';
+export as namespace Types;
 
-declare namespace Models {
-  export type Subject = SubjectModel.Subject;
-}
+export * from './global';
+export * from './subject';

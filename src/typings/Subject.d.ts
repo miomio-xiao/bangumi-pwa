@@ -1,4 +1,4 @@
-export interface SubjectImages {
+export interface ISubjectImages {
   common?: string;
   grid?: string;
   large?: string;
@@ -6,7 +6,7 @@ export interface SubjectImages {
   small?: string;
 }
 
-export interface Subject {
+export interface ISubject {
   id: number;
   type: number | string;
   name: string;
@@ -15,8 +15,13 @@ export interface Subject {
   air_weekday?: string;
   rating?: any;
   rank?: number;
-  images: SubjectImages;
+  images: ISubjectImages;
   summary?: string;
   staff?: Array<any>;
   url: string;
+}
+
+export interface ICalendar {
+  items: Array<any>;
+  weekday: any;
 }

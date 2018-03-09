@@ -53,7 +53,7 @@
               <v-list-tile-avatar>
                 <img :src="item.user.avatar.small">
               </v-list-tile-avatar>
-              <v-list-tile-content @click="showBlogContent(item)">
+              <v-list-tile-content>
                 <v-list-tile-title class="blog__title">{{ item.title }}</v-list-tile-title>
                 <v-list-tile-sub-title>
                   by 
@@ -93,7 +93,7 @@ import api from '../api';
   }
 })
 export default class Subjects extends Vue {
-  private subject: Subject;
+  private subject!: Types.ISubject;
   private loading: boolean = false;
   private showChart: boolean = false;
   private showRank: boolean = false;
@@ -148,7 +148,6 @@ export default class Subjects extends Vue {
     const id: string = this.$route.params.id;
     try {
       const data = await api.getSubjectById(id);
-      console.log(data);
       this.subject = data;
     } catch (error) {
       console.log(error);
@@ -160,7 +159,6 @@ export default class Subjects extends Vue {
     const id: string = this.$route.params.id;
     try {
       const data = await api.getSubjectById(id, 'large');
-      console.log(data);
       this.subject = data;
       this.loading = false;
     } catch (error) {
@@ -309,7 +307,10 @@ header {
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     padding-top: 4px;
-    font-size: 14px;
+    font-size: 12px;
+    line-height: 1.4em;
+    height: 70px;
+    overflow: hidden;
     color: #777;
   }
 }

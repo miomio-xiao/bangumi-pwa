@@ -29,7 +29,7 @@ const reviewLegend = ['people', 'rank', 'score'];
 
 @Component
 export default class SubjectChart extends Vue {
-  @Prop() subject!: Subject;
+  @Prop() subject!: Types.ISubject;
 
   private initOptions: Object = { renderer: 'svg' };
 
@@ -222,8 +222,6 @@ export default class SubjectChart extends Vue {
         color: '#E91E63',
         maskColor: 'rgba(255, 255, 255, 0.4)'
       });
-      // const data = await api.getSubjectById(id);
-      // this.subject = data;
       rate.hideLoading();
       rate.mergeOptions({
         series: [

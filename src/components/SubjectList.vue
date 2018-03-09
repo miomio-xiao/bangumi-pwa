@@ -46,10 +46,6 @@ export default class SubjectList extends Vue {
   enter(id: number | string) {
     this.$router.push(`/subject/${id}`);
   }
-
-  created() {
-    console.log(this.list);
-  }
 }
 </script>
 

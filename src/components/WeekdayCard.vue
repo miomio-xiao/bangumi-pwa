@@ -23,11 +23,6 @@ import BScroll from 'better-scroll';
 
 import SubjectItem from '@/components/SubjectItem.vue';
 
-type calendar = {
-  items: Array<any>;
-  weekday: any;
-};
-
 @Component({
   components: {
     SubjectItem
@@ -35,9 +30,9 @@ type calendar = {
 })
 export default class WeekdayCard extends Vue {
   @Prop()
-  calendar!: calendar
+  calendar!: Types.ICalendar
 
-  scroll!: BScroll
+  private scroll!: BScroll
 
   get title() {
     return this.calendar.weekday.en;
