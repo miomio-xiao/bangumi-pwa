@@ -87,6 +87,7 @@ import SubjectChart from '../components/SubjectChart.vue';
 import api from '../api';
 
 @Component({
+  name: 'subjects',
   components: {
     Rate,
     SubjectChart
@@ -178,7 +179,6 @@ export default class Subjects extends Vue {
       height: 92%;
       bottom: 0;
       top: auto;
-      background: #fff;
     }
   }
 }

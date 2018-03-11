@@ -26,6 +26,7 @@ import api from '../api';
 import WeekdayCard from '@/components/WeekdayCard.vue';
 
 @Component({
+  name: 'calendar',
   components: {
     WeekdayCard
   }

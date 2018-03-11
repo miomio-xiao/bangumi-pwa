@@ -46,6 +46,7 @@ import { debounce } from '../utils/decorator';
 import Api from '../api';
 
 @Component({
+  name: 'search',
   components: {
     SubjectList
   }
@@ -116,7 +117,7 @@ export default class Search extends Vue {
 <style lang="scss" scoped>
 .search-page {
   .input {
-    color: #fff!important;
+    color: #fff !important;
   }
   .history {
     margin-top: 12px;

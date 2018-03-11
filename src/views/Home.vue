@@ -9,6 +9,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import Calendar from './Calendar.vue';
 
 @Component({
+  name: 'home',
   components: {
     Calendar
   }
