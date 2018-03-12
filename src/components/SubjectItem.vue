@@ -2,7 +2,7 @@
   <div class="item"
        @click="enter">
     <div class="item__poster"
-         :style="{ backgroundImage: `url(${image})` }">
+         v-lazy:background-image="image">
     </div>
     <span class="item__title">{{ subject.name_cn || subject.name }}</span>
     <div class="item__rating">

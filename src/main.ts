@@ -9,12 +9,20 @@ import 'echarts/lib/chart/pie';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/title';
-import 'echarts/lib/theme/light'
+import 'echarts/lib/theme/light';
 
 import App from './App.vue';
 import router from './router';
 import './registerServiceWorker.ts';
 import 'vuetify/dist/vuetify.min.css';
+
+import VueLazyload from 'vue-lazyload';
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: require('@/assets/imgs/404.jpg'),
+  loading: require('@/assets/imgs/loading.svg'),
+  attempt: 3
+});
 
 Vue.config.productionTip = false;
 
