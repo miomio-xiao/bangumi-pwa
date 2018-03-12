@@ -44,7 +44,7 @@ module.exports = {
           }
         },
         {
-          urlPattern: 'http://lain.bgm.tv/pic/(.*).jpg',
+          urlPattern: /^https?:\/\/lain\.bgm\.tv\/pic\//,
           handler: 'cacheFirst',
           options: {
             cacheName: 'images',
