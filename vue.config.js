@@ -45,14 +45,14 @@ module.exports = {
         },
         {
           urlPattern: /^https?:\/\/lain\.bgm\.tv\/pic\//,
-          handler: 'cacheFirst',
+          handler: 'networkFirst',
           options: {
             cacheName: 'images',
             expiration: {
               maxEntries: 100,
               maxAgeSeconds: 7 * 24 * 60 * 60
             },
-            cacheableResponse: { statuses: [0, 200] }
+            cacheableResponse: { statuses: [0, 200, 503] }
           }
         }
       ]
