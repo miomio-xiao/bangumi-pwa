@@ -19,14 +19,14 @@ module.exports = {
   pwa: {
     workboxPluginMode: 'GenerateSW',
     workboxOptions: {
-      // swSrc: 'dist/service-worker.js',
-      swDest: './service-worker.js',
       importWorkboxFrom: 'local',
+      swDest: './service-worker.js',
       cacheId: 'bangumi',
       globDirectory: 'dist',
-      globPatterns: ['**/*.{html,js,css,eot,svg,ttf,woff}'],
-      globIgnores: ['service-worker.js', '**/*.map'],
-      include: [/\.jpg$/, /\.png$/],
+      globPatterns: ['*/*.{html,js,css,eot,svg,ttf,woff}'],
+      globIgnores: ['**/*.map'],
+      clientsClaim: true,
+      skipWaiting: true,
       runtimeCaching: [
         {
           urlPattern: /api/,
@@ -40,8 +40,19 @@ module.exports = {
             },
             cacheableResponse: {
               statuses: [0, 200]
-              // headers: { 'x-test': 'true' }
             }
+          }
+        },
+        {
+          urlPattern: 'http://lain.bgm.tv/pic/(.*).jpg',
+          handler: 'cacheFirst',
+          options: {
+            cacheName: 'images',
+            expiration: {
+              maxEntries: 100,
+              maxAgeSeconds: 7 * 24 * 60 * 60
+            },
+            cacheableResponse: { statuses: [0, 200] }
           }
         }
       ]
