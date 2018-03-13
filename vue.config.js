@@ -44,12 +44,12 @@ module.exports = {
           }
         },
         {
-          urlPattern: /^https?:\/\/lain\.bgm\.tv\/pic\//,
-          handler: 'networkFirst',
+          urlPattern: new RegExp('http://lain.bgm.tv/pic/(.*)'),
+          handler: 'cacheFirst',
           options: {
-            cacheName: 'images',
+            cacheName: 'images-cache',
             expiration: {
-              maxEntries: 100,
+              maxEntries: 20,
               maxAgeSeconds: 7 * 24 * 60 * 60
             },
             cacheableResponse: { statuses: [0, 200, 503] }
