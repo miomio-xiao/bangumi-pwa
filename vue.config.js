@@ -45,8 +45,9 @@ module.exports = {
         },
         {
           urlPattern: new RegExp('http://lain.bgm.tv/pic/(.*)'),
-          handler: 'cacheFirst',
+          handler: 'networkFirst',
           options: {
+            networkTimeoutSeconds: 10,
             cacheName: 'images-cache',
             expiration: {
               maxEntries: 20,
