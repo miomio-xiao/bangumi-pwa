@@ -1,5 +1,5 @@
 {
-  "name": "bangumi pwa",
+  "name": "bangumi",
   "short_name": "bangumi",
   "icons": [
     {
@@ -8,13 +8,18 @@
       "type": "image/png"
     },
     {
-      "src": "/img/icons/android-chrome-512x512.png",
-      "sizes": "512x512",
+      "src": "/img/icons/android-chrome-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/img/icons/android-chrome-72x72.png",
+      "sizes": "72x72",
       "type": "image/png"
     }
   ],
   "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#000000",
+  "background_color": "#ffafc9",
   "theme_color": "#e91e63"
 }
