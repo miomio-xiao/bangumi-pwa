@@ -7,7 +7,7 @@
              @click="back()">
         <v-icon>arrow_back</v-icon>
       </v-btn>
-      <h1 class="page__title">{{ subject.name_cn }}</h1>
+      <h1 class="page__title">{{ subject.name_cn || subject.name }}</h1>
     </v-toolbar>
     <header>
       <div class="bg"
