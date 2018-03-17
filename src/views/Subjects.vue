@@ -1,5 +1,6 @@
 <template>
-  <div class="page" v-if="!loading">
+  <div class="page"
+       v-if="!loading">
     <v-toolbar dark
                color="pink">
       <v-btn icon
@@ -9,17 +10,17 @@
       <h1 class="page__title">{{ subject.name_cn }}</h1>
     </v-toolbar>
     <header>
-      <div class="bg" 
+      <div class="bg"
            :style="{ backgroundImage: `url(${image})` }"></div>
       <div class="subject">
-        <div class="subject__poster" 
+        <div class="subject__poster"
              :style="{ backgroundImage: `url(${image})` }"></div>
         <div class="subject__info">
           <div class="subject__title">
             <p>{{ subject.name_cn }}</p>
             <p>{{ subject.name }}</p>
           </div>
-          <div @click="showSheet">    
+          <div @click="showSheet">
             <span class="score">{{ score }}</span>
             <div class="subject__rating">
               <Rate :num="score"
@@ -29,8 +30,8 @@
           </div>
         </div>
         <div class="subject__rank"
-              @click="showRank = !showRank"
-              v-if="subject.rank">
+             @click="showRank = !showRank"
+             v-if="subject.rank">
           <span v-show="showRank">{{ subject.rank }}</span>
         </div>
       </div>
@@ -41,41 +42,61 @@
       <div class="summary">
         <h3 class="sub">剧情简介</h3>
         <div class="content"
+             v-if="summary"
              :class="{ more: !summaryMore }"
              @click="summaryMore = !summaryMore"
              v-html="summary">
         </div>
+        <div class="null-alert"
+             v-else>暂无更多信息</div>
+      </div>
+      <div class="crt">
+        <h3 class="sub">角色</h3>
+        <SubjectCharactor v-if="subject.crt"
+                          :charactors="subject.crt"></SubjectCharactor>
+        <div class="null-alert"
+             v-else>暂无更多信息</div>
       </div>
       <div class="blog">
         <h3 class="sub">评论</h3>
-        <v-list three-line class="blog__list">
-            <v-list-tile avatar v-for="(item, index) in subject.blog" :key="index" class="blog__item">
-              <v-list-tile-avatar>
-                <img :src="item.user.avatar.small">
-              </v-list-tile-avatar>
-              <v-list-tile-content>
-                <v-list-tile-title class="blog__title">{{ item.title }}</v-list-tile-title>
-                <v-list-tile-sub-title>
-                  by 
-                  <span class="blog__user">{{ item.user.nickname }}</span>
-                  <span class="blog__time">{{ item.dateline }}</span>
-                </v-list-tile-sub-title>
-                <div class="blog__content" v-html="item.summary"></div>
-              </v-list-tile-content>
-            </v-list-tile>
+        <v-list three-line
+                class="blog__list"
+                v-if="subject.blog">
+          <v-list-tile avatar
+                       v-for="(item, index) in subject.blog"
+                       :key="index"
+                       class="blog__item">
+            <v-list-tile-avatar>
+              <img :src="item.user.avatar.small">
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title class="blog__title">{{ item.title }}</v-list-tile-title>
+              <v-list-tile-sub-title>
+                by
+                <span class="blog__user">{{ item.user.nickname }}</span>
+                <span class="blog__time">{{ item.dateline }}</span>
+              </v-list-tile-sub-title>
+              <div class="blog__content"
+                   v-html="item.summary"></div>
+            </v-list-tile-content>
+          </v-list-tile>
         </v-list>
+        <div class="null-alert"
+             v-else>暂无更多信息</div>
       </div>
     </div>
     <v-dialog v-model="showChart"
-              fullscreen transition="dialog-bottom-transition"
+              fullscreen
+              transition="dialog-bottom-transition"
               :overlay="false"
               lazy>
       <subject-chart :subject="subject"></subject-chart>
     </v-dialog>
   </div>
-  <div class="loading" v-else>
-    <v-progress-circular indeterminate 
-                         :width="3" 
+  <div class="loading"
+       v-else>
+    <v-progress-circular indeterminate
+                         :width="3"
                          color="pink"></v-progress-circular>
   </div>
 </template>
@@ -83,6 +104,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import Rate from '../components/Rate.vue';
+import SubjectCharactor from '../components/SubjectCharactor/index.vue';
 import SubjectChart from '../components/SubjectChart/index.vue';
 import api from '../api';
 
@@ -90,7 +112,8 @@ import api from '../api';
   name: 'subjects',
   components: {
     Rate,
-    SubjectChart
+    SubjectChart,
+    SubjectCharactor
   }
 })
 export default class Subjects extends Vue {
@@ -275,6 +298,10 @@ header {
       transition: 0.3s ease-in-out;
     }
   }
+}
+
+.crt {
+  margin-top: 12px;
 }
 
 .blog {

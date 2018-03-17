@@ -14,6 +14,17 @@ export interface ISubjectCollection {
   wish?: number;
 }
 
+export interface ISubjectCharactor {
+  id: number;
+  name: string;
+  url: string;
+  images: ISubjectImages;
+  role_name: string;
+  name_cn?: string;
+  info?: any;
+  actors?: any;
+}
+
 export interface ISubject {
   id: number;
   type: number | string;

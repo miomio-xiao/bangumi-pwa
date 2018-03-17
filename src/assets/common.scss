@@ -19,6 +19,33 @@
   align-items: center;
 }
 
+.null-alert {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  padding: 8px;
+  color: #ffc107;
+  &::before {
+    display: inline-block;
+    content: '';
+    width: 64px;
+    height: 1px;
+    margin-right: 8px;
+    vertical-align: middle;
+    background: #ccc;
+  }
+
+  &::after {
+    display: inline-block;
+    content: '';
+    width: 64px;
+    height: 1px;
+    margin-left: 8px;
+    vertical-align: middle;
+    background: #ccc;
+  }
+}
+
 li {
   list-style-type: none;
 }
