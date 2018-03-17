@@ -4,7 +4,7 @@
          v-lazy:background-image="image">
     </div>
     <span class="charactor__name">{{ charactor.name }}</span>
-    <span class="charactor__name"
+    <span class="charactor__name charactor__name--cn"
           v-if="charactor.name_cn && charactor.name !== charactor.name_cn">{{ charactor.name_cn }}</span>
     <div class="charactor__actor">
       CV:
@@ -60,6 +60,9 @@ export default class CharactorCard extends Vue {
     white-space: nowrap;
     word-wrap: normal;
     color: #111;
+    &--cn {
+      white-space: normal;
+    }
   }
 
   &__actor {

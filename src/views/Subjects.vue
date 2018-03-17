@@ -37,8 +37,10 @@
       </div>
     </header>
     <div class="info">
-      <p>{{ subject.air_date }}</p>
-      <p>{{ staffs }}</p>
+      <p>放送日期: {{ subject.air_date }}</p>
+      <p :class="{ staff : !showStaffsDetail }"
+         @click="showStaffsDetail = !showStaffsDetail"
+         v-html="showStaffsDetail ? staffsDetail : staffs"></p>
       <div class="summary">
         <h3 class="sub">剧情简介</h3>
         <div class="content"
@@ -103,6 +105,7 @@ export default class Subjects extends Vue {
   private loading: boolean = false;
   private showChart: boolean = false;
   private showRank: boolean = false;
+  private showStaffsDetail: boolean = false;
   private summaryMore: boolean = false;
   private title: string = '详情';
 
@@ -128,6 +131,19 @@ export default class Subjects extends Vue {
     const staffs = this.subject.staff;
     if (staffs && staffs.length > 0) {
       return staffs.map(staff => staff.name || staff.name_cn).join(' / ');
+    } else {
+      return '';
+    }
+  }
+
+  get staffsDetail(): string {
+    const staffs = this.subject.staff;
+    if (staffs && staffs.length > 0) {
+      return staffs.map(staff => {
+        const name = staff.name || staff.name_cn;
+        const jobs = staff.jobs || [];
+        return `${name} : ${jobs.join(' / ')}`;
+      }).join('</br>');
     } else {
       return '';
     }
@@ -271,6 +287,19 @@ header {
   p {
     font-size: 14px;
     line-height: 1.6em;
+  }
+  .staff {
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 25px;
+      background: linear-gradient(rgba(255, 255, 255, 0.001), #fff);
+      pointer-events: none;
+    }
   }
   .summary {
     margin-top: 12px;

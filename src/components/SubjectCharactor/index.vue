@@ -30,7 +30,7 @@ export default class WeekdayCard extends Vue {
   scroll!: BScroll;
 
   get listStyles() {
-    const width = this.charactors.length * 80 + 100;
+    const width = this.charactors.length * 100;
     return {
       width: width + 'px'
     };
@@ -52,7 +52,7 @@ export default class WeekdayCard extends Vue {
 <style lang="scss" scoped>
 .wrapper {
   width: 100vw;
-  height: 160px;
+  min-height: 160px;
   .wrapper__content {
     position: relative;
     display: flex;

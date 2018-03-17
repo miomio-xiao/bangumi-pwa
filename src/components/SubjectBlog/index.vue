@@ -1,25 +1,23 @@
 <template>
-  <v-list three-line
-          class="blog__list">
-    <v-list-tile avatar
-                 v-for="(item, index) in blogs"
-                 :key="index"
-                 class="blog__item">
-      <v-list-tile-avatar>
-        <img :src="item.user.avatar.small">
-      </v-list-tile-avatar>
-      <v-list-tile-content>
-        <v-list-tile-title class="blog__title">{{ item.title }}</v-list-tile-title>
-        <v-list-tile-sub-title>
-          by
-          <span class="blog__user">{{ item.user.nickname }}</span>
-          <span class="blog__time">{{ item.dateline }}</span>
-        </v-list-tile-sub-title>
-        <div class="blog__content"
-             v-html="item.summary"></div>
-      </v-list-tile-content>
-    </v-list-tile>
-  </v-list>
+  <ul class="blog__list">
+    <li v-for="(item, index) in blogs"
+        :key="index"
+        class="blog__item"
+        @click="enterBlog(item)">
+      <div class="blog__hd">
+        <div class="blog__avatar">
+          <img width="100%"
+               height="100%"
+               :src="item.user.avatar.small">
+        </div>
+        <span class="blog__user">{{ item.user.nickname }}</span>
+        <span class="blog__time">{{ item.dateline }}</span>
+      </div>
+      <div class="blog__title">{{ item.title }}</div>
+      <div class="blog__content"
+           v-html="item.summary"></div>
+    </li>
+  </ul>
 </template>
 
 <script lang="ts">
@@ -29,45 +27,67 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 export default class SubjectBlog extends Vue {
   @Prop({ type: Array, default: [] })
   blogs!: Array<Types.ISubjectBlog>;
+
+  enterBlog(item: Types.ISubjectBlog) {
+    this.$emit('on-click', item);
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .blog {
-  margin-top: 12px;
   &__item {
-    height: 120px;
+    height: 150px;
     margin-bottom: 10px;
     line-height: 1.4em;
-    & /deep/ .list__tile {
-      height: 100%;
-    }
+    box-shadow: 0px 2px 1px -1px rgba(180, 160, 120, 0.6);
+  }
+
+  &__hd {
+    display: flex;
+    padding-bottom: 6px;
+  }
+
+  &__avatar {
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
   }
 
   &__title {
+    font-size: 16px;
     color: rgba(0, 0, 0, 0.87);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    overflow: hidden;
   }
 
   &__user {
+    flex: 1;
+    align-self: center;
+    padding-left: 10px;
     color: #bd4147;
   }
 
   &__time {
-    padding-left: 5px;
+    flex: 0 0 auto;
     color: #ccc;
   }
 
   &__content {
     display: -webkit-box;
     white-space: normal;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
     padding-top: 4px;
     font-size: 12px;
     line-height: 1.4em;
-    height: 70px;
+    height: 90px;
     overflow: hidden;
-    color: #777;
+    color: #888;
   }
 }
 </style>
