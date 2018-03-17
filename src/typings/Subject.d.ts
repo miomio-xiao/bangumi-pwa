@@ -6,19 +6,28 @@ export interface ISubjectImages {
   small?: string;
 }
 
+export interface ISubjectCollection {
+  collect?: number;
+  doing?: number;
+  dropped?: number;
+  on_hold?: number;
+  wish?: number;
+}
+
 export interface ISubject {
   id: number;
   type: number | string;
   name: string;
-  name_cn?: string;
+  url: string;
   air_date: string;
+  images: ISubjectImages;
+  name_cn?: string;
   air_weekday?: string;
   rating?: any;
   rank?: number;
-  images: ISubjectImages;
+  collection?: ISubjectCollection;
   summary?: string;
   staff?: Array<any>;
-  url: string;
 }
 
 export interface ICalendar {

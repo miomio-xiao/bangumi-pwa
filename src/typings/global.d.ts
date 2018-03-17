@@ -5,3 +5,5 @@ export interface IReviewOptions {
   period?: string;
   check?: boolean;
 }
+
+export type kvObject = { name: string; value: any };

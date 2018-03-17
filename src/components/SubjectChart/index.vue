@@ -5,18 +5,26 @@
            theme="light"
            ref="rateChart"
            class="chart"></chart>
+
+    <chart :options="pieOptions"
+           :init-options="initOptions"
+           theme="light"
+           ref="collectionChart"
+           class="chart"></chart>
+
     <chart :options="lineOptions"
            :init-options="initOptions"
            theme="light"
            ref="reviewChart"
            class="chart"></chart>
+
   </div>
 </template>
 
 <script lang="ts">
 import { Prop, Watch, Component, Vue } from 'vue-property-decorator';
-import { LinearGradient } from 'echarts/lib/util/graphic';
-import api from '../api';
+import ChartOptions, { scoreArr, reviewLegend } from './chartOptions';
+import api from '@/api';
 
 interface VECharts extends Element {
   showLoading: Function;
@@ -24,151 +32,19 @@ interface VECharts extends Element {
   mergeOptions: Function;
 }
 
-const scoreArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const reviewLegend = ['people', 'rank', 'score'];
-
 @Component
 export default class SubjectChart extends Vue {
   @Prop() subject!: Types.ISubject;
 
   private initOptions: Object = { renderer: 'svg' };
 
-  private barOptions: Object = {
-    color: ['#3398DB'],
-    xAxis: {
-      type: 'category',
-      data: scoreArr,
-      axisTick: {
-        alignWithLabel: true
-      }
-    },
-    yAxis: {
-      type: 'value',
-      name: '评分人数(人)',
-      axisLabel: {
-        formatter: '{value}'
-      }
-    },
-    series: [
-      {
-        type: 'bar',
-        data: [],
-        label: {
-          normal: {
-            show: true,
-            position: 'top'
-          }
-        },
-        itemStyle: {
-          normal: {
-            color: new LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: '#83bff6' },
-              { offset: 0.5, color: '#188df0' },
-              { offset: 1, color: '#188df0' }
-            ])
-          },
-          emphasis: {
-            color: new LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: '#2378f7' },
-              { offset: 0.7, color: '#2378f7' },
-              { offset: 1, color: '#83bff6' }
-            ])
-          }
-        }
-      }
-    ]
-  };
+  private barOptions: Object = ChartOptions.rateBarOptions;
 
-  private lineOptions: Object = {
-    tooltip: {
-      trigger: 'axis'
-    },
-    legend: {
-      data: reviewLegend
-    },
-    grid: {
-      left: '2%',
-      right: '2%',
-      bottom: '3%',
-      containLabel: true
-    },
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: []
-    },
-    yAxis: [
-      {
-        type: 'value',
-        name: 'rank',
-        offset: 5,
-        nameLocation: 'start',
-        inverse: true,
-        axisLine: {
-          lineStyle: {}
-        },
-        splitLine: {
-          show: false
-        },
-        axisLabel: {
-          formatter: '{value}'
-        }
-      },
-      {
-        type: 'value',
-        name: 'score',
-        offset: 10,
-        axisLine: {
-          show: false,
-          lineStyle: {}
-        },
-        splitLine: {
-          show: false
-        },
-        axisLabel: {
-          formatter: '{value}'
-        }
-      },
-      {
-        show: false,
-        type: 'value',
-        name: 'people',
-        axisLine: {
-          lineStyle: {}
-        },
-        splitLine: {
-          show: false
-        },
-        axisLabel: {
-          formatter: '{value}'
-        }
-      }
-    ],
-    series: [
-      {
-        type: 'line',
-        symbolSize: 0,
-        yAxisIndex: 0,
-        data: []
-      },
-      {
-        type: 'line',
-        symbolSize: 0,
-        smooth: true,
-        yAxisIndex: 1,
-        data: []
-      },
-      {
-        type: 'line',
-        symbolSize: 0,
-        smooth: true,
-        yAxisIndex: 2,
-        data: []
-      }
-    ]
-  };
+  private lineOptions: Object = ChartOptions.reviewLineOptions;
 
-  get subText() {
+  private pieOptions: Object = ChartOptions.collectionPieOptions;
+
+  get subText(): string {
     if (this.subject.rank) {
       return `Bangumi Anime Ranked: #${this.subject.rank}`;
     }
@@ -181,6 +57,14 @@ export default class SubjectChart extends Vue {
     }
     return {};
   }
+
+  get collectionData(): Types.ISubjectCollection {
+    if (this.subject) {
+      return this.subject.collection || {};
+    }
+    return {};
+  }
+
   get rateTotal(): number {
     if (this.subject) {
       return this.subject.rating.total || 0;
@@ -214,25 +98,45 @@ export default class SubjectChart extends Vue {
     };
   }
 
-  async getRateData(id: number | string) {
-    const rate = this.$refs.rateChart as VECharts;
-    try {
-      rate.showLoading({
-        text: '正在加载',
-        color: '#E91E63',
-        maskColor: 'rgba(255, 255, 255, 0.4)'
-      });
-      rate.hideLoading();
-      rate.mergeOptions({
-        series: [
-          {
-            data: scoreArr.map(v => this.rateData[v] || '-')
-          }
-        ]
-      });
-    } catch (error) {
-      console.log(error);
-    }
+  async getRateData() {
+    const rates = this.$refs.rateChart as VECharts;
+    rates.showLoading({
+      text: '正在加载',
+      color: '#E91E63',
+      maskColor: 'rgba(255, 255, 255, 0.4)'
+    });
+    rates.hideLoading();
+    rates.mergeOptions({
+      series: [
+        {
+          data: scoreArr.map(v => this.rateData[v] || '-')
+        }
+      ]
+    });
+  }
+
+  async getCollectionData() {
+    let collectionArr: Array<Types.kvObject> = [
+      { name: '想看', value: this.collectionData.wish },
+      { name: '看过', value: this.collectionData.collect },
+      { name: '在看', value: this.collectionData.doing },
+      { name: '搁置', value: this.collectionData.on_hold },
+      { name: '抛弃', value: this.collectionData.dropped }
+    ];
+    const collections = this.$refs.collectionChart as VECharts;
+    collections.showLoading({
+      text: '正在加载',
+      color: '#E91E63',
+      maskColor: 'rgba(255, 255, 255, 0.4)'
+    });
+    collections.hideLoading();
+    collections.mergeOptions({
+      series: [
+        {
+          data: collectionArr.sort((a, b) => a.value - b.value)
+        }
+      ]
+    });
   }
 
   async getReviewData(id: number | string) {
@@ -288,7 +192,8 @@ export default class SubjectChart extends Vue {
 
   async mounted() {
     const id = this.$route.params.id;
-    this.getRateData(id);
+    this.getRateData();
+    this.getCollectionData();
     this.getReviewData(id);
   }
 }

@@ -83,7 +83,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import Rate from '../components/Rate.vue';
-import SubjectChart from '../components/SubjectChart.vue';
+import SubjectChart from '../components/SubjectChart/index.vue';
 import api from '../api';
 
 @Component({
