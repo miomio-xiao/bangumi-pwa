@@ -23,7 +23,7 @@ export default class Rate extends Vue {
       width: `${this.size}px`,
       height: `${this.size}px`,
       backgroundSize: `${this.size}px ${this.size}px`
-    }
+    };
   }
 
   starStatus(pos: number, score: number): string {

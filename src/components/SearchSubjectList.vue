@@ -40,8 +40,9 @@ import Rate from './Rate.vue';
     Rate
   }
 })
-export default class SubjectList extends Vue {
-  @Prop({type: Array, default: [] }) private list!: Array<any>;
+export default class SearchSubjectList extends Vue {
+  @Prop({ type: Array, default: [] })
+  list!: Array<any>;
 
   enter(id: number | string) {
     this.$router.push(`/subject/${id}`);

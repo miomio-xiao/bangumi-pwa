@@ -2,7 +2,7 @@
   <div class="search-page">
     <v-toolbar dark
                color="pink">
-      <v-btn icon 
+      <v-btn icon
              @click="back()">
         <v-icon>arrow_back</v-icon>
       </v-btn>
@@ -16,12 +16,12 @@
     </v-toolbar>
     <div class="loading"
          v-if="loading">
-      <v-progress-circular indeterminate 
-                          :width="3" 
-                          color="pink"></v-progress-circular>
+      <v-progress-circular indeterminate
+                           :width="3"
+                           color="pink"></v-progress-circular>
     </div>
-    <SubjectList v-else-if="list.length > 0"
-                 :list="list"></SubjectList>
+    <SearchSubjectList v-else-if="list.length > 0"
+                       :list="list"></SearchSubjectList>
     <div class="history"
          v-else-if="searchItems.length > 0 && !keyword">
       <div class="history__hd">
@@ -29,7 +29,7 @@
         <span class="history__clear"
               @click="clearHistory">清除</span>
       </div>
-      <ul class="history__items" >
+      <ul class="history__items">
         <li class="history__item"
             v-for="(item, i) in searchItems"
             :key="i"
@@ -41,14 +41,14 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import SubjectList from '../components/SubjectList.vue';
+import SearchSubjectList from '@/components/SearchSubjectList.vue';
 import { debounce } from '../utils/decorator';
 import Api from '../api';
 
 @Component({
   name: 'search',
   components: {
-    SubjectList
+    SearchSubjectList
   }
 })
 export default class Search extends Vue {

@@ -17,15 +17,13 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import Rate from './Rate.vue';
-import api from '../api';
-
+import Rate from '@/components/Rate.vue';
 @Component({
   components: {
     Rate
   }
 })
-export default class SubjectItem extends Vue {
+export default class WeekdaySubjectItem extends Vue {
   @Prop()
   subject!: Types.ISubject
 
@@ -60,8 +58,6 @@ export default class SubjectItem extends Vue {
 </script>
 
 <style lang="scss" scoped>
-$fontSize: 14px;
-
 .item {
   display: inline-block;
   vertical-align: top;
@@ -80,7 +76,7 @@ $fontSize: 14px;
     display: block;
     max-width: 100%;
     margin-top: 10px;
-    font-size: $fontSize;
+    font-size: 14px;
     line-height: 1.2em;
     overflow: hidden;
     text-overflow: ellipsis;

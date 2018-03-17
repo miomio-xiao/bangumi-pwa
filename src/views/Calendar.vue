@@ -23,7 +23,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import api from '../api';
 
-import WeekdayCard from '@/components/WeekdayCard.vue';
+import WeekdayCard from '@/components/WeekdayCard/index.vue';
 
 @Component({
   name: 'calendar',

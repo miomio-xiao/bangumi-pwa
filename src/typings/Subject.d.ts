@@ -25,6 +25,17 @@ export interface ISubjectCharactor {
   actors?: any;
 }
 
+export interface ISubjectBlog {
+  id: number;
+  title: string;
+  url: string;
+  dateline: string;
+  timestamp: number;
+  summary: string;
+  replies: number;
+  user: Types.IUser;
+}
+
 export interface ISubject {
   id: number;
   type: number | string;

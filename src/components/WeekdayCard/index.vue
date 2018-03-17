@@ -10,7 +10,7 @@
         <li v-for="(item, i) in calendar.items"
             :key="i"
             class="item">
-          <SubjectItem :subject="item"></SubjectItem>
+          <WeekdaySubjectItem :subject="item"></WeekdaySubjectItem>
         </li>
       </ul>
     </div>
@@ -21,11 +21,11 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import BScroll from 'better-scroll';
 
-import SubjectItem from '@/components/SubjectItem.vue';
+import WeekdaySubjectItem from './WeekdaySubjectItem.vue';
 
 @Component({
   components: {
-    SubjectItem
+    WeekdaySubjectItem
   }
 })
 export default class WeekdayCard extends Vue {
