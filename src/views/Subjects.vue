@@ -315,6 +315,10 @@ header {
   margin-top: 12px;
 }
 
+.blog {
+  margin-top: 12px;
+}
+
 .sub {
   font-weight: normal;
   padding: 0 0 10px;

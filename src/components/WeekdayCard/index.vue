@@ -39,7 +39,7 @@ export default class WeekdayCard extends Vue {
   }
 
   get listStyles() {
-    const width = this.calendar.items.length * 100 + 140;
+    const width = this.calendar.items.length * 120;
     return {
       width: width + 'px'
     }
