@@ -53,15 +53,22 @@
              v-else>暂无更多信息</div>
       </div>
       <div class="crt">
-        <h3 class="sub">章节</h3>
-        <SubjectEp :ep-list="subject.eps"></SubjectEp>
-      </div>
-      <div class="crt">
         <h3 class="sub">角色</h3>
         <SubjectCharactor v-if="subject.crt"
                           :charactors="subject.crt"></SubjectCharactor>
         <div class="null-alert"
              v-else>暂无更多信息</div>
+      </div>
+      <div class="crt">
+        <h3 class="sub">站点</h3>
+        <SubjectResource v-if="siteList.length"
+                         :site-list="siteList"></SubjectResource>
+        <div class="null-alert"
+             v-else>暂无更多信息</div>
+      </div>
+      <div class="crt">
+        <h3 class="sub">章节</h3>
+        <SubjectEp :ep-list="subject.eps"></SubjectEp>
       </div>
       <div class="blog">
         <h3 class="sub">评论</h3>
@@ -96,6 +103,7 @@ import Rate from '@/components/Rate.vue';
 import Loading from '@/components/Loading.vue';
 import SubjectCharactor from '@/components/SubjectCharactor/index.vue';
 import SubjectEp from '@/components/SubjectEp/index.vue';
+import SubjectResource from '@/components/SubjectResource/index.vue';
 import SubjectBlog from '@/components/SubjectBlog/index.vue';
 import SubjectComments from '@/components/SubjectComments/index.vue';
 import SubjectChart from '@/components/SubjectChart/index.vue';
@@ -109,6 +117,7 @@ import api from '@/api';
     SubjectChart,
     SubjectCharactor,
     SubjectEp,
+    SubjectResource,
     SubjectBlog,
     SubjectComments
   }
@@ -117,6 +126,7 @@ export default class Subjects extends Vue {
   private id: string = '';
   private subject!: Types.ISubject;
   private comments: Types.ISubjectComment[] = [];
+  private siteList: Types.ISubjectResourceInfo[] = [];
 
   private loading: boolean = false;
   private showComments: boolean = false;
@@ -194,6 +204,10 @@ export default class Subjects extends Vue {
     this.comments = await api.getSubjectCommentsById(this.id);
   }
 
+  async fetchSiteList() {
+    this.siteList = await api.getSiteList(this.id);
+  }
+
   async fetchSubject() {
     this.subject = await api.getSubjectById(this.id, 'large');
   }
@@ -211,6 +225,7 @@ export default class Subjects extends Vue {
     }
 
     this.fetchComments();
+    this.fetchSiteList();
   }
 }
 </script>

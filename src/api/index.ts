@@ -53,13 +53,23 @@ export default class Api {
   }
 
   /**
-   * 条目吐槽
+   * 章节信息
    *
    * @param {(number | string)} id
    *
    */
   public static async getEpInfo(id: number | string): Promise<any> {
     return get(`ep/${id}`);
+  }
+
+  /**
+   * 资源站点信息
+   *
+   * @param {(number | string)} id
+   *
+   */
+  public static async getSiteList(id: number | string): Promise<any> {
+    return get(`subject/${id}/resource`);
   }
 
   /**

@@ -58,6 +58,53 @@ export interface ISubjectEpInfo {
   url: string;
 }
 
+type SiteType = 'info' | 'onair' | 'resource';
+type SiteName =
+  | 'acfun'
+  | 'bangumi'
+  | 'bilibili'
+  | 'dmhy'
+  | 'iqiyi'
+  | 'kankan'
+  | 'letv'
+  | 'mgtv'
+  | 'nyaa'
+  | 'pptv'
+  | 'qq'
+  | 'saraba1st'
+  | 'sohu'
+  | 'tucao'
+  | 'tudou'
+  | 'youku';
+
+export interface ISubjectResourceInfo {
+  key: SiteName;
+  title: string;
+  type: SiteType;
+  url: string;
+  // 站点信息
+  siteInfo: ISiteInfo;
+}
+
+export interface ISiteInfo {
+  // 站点名称 id
+  site: SiteName;
+  // 番剧页面 id
+  id: String;
+  // 播放开始
+  begin: Date;
+  // 是否官方版权所有
+  official: Boolean | null;
+  // 是否需要会员
+  premuiumOnly: Boolean | null;
+  // 是否有审查、删减
+  censored: Boolean | null;
+  // 是否有实际视频
+  exist: Boolean | null;
+  // 备注
+  comment: String;
+}
+
 export interface ISubject {
   id: number;
   type: number | string;
