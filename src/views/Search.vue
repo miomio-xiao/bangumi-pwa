@@ -14,14 +14,16 @@
                     @input="change"
                     @keyup.enter="submit"></v-text-field>
     </v-toolbar>
-    <div class="loading"
-         v-if="loading">
-      <v-progress-circular indeterminate
-                           :width="3"
-                           color="pink"></v-progress-circular>
+    <loading v-if="loading"
+             :full="true" />
+    <div class="search-content"
+         v-else-if="list.length > 0">
+      <Scroll ref="scroll"
+              :pullUpLoad="pullUpLoadObj"
+              @pullingUp="onPullingUp">
+        <SearchSubjectList :list="list" />
+      </Scroll>
     </div>
-    <SearchSubjectList v-else-if="list.length > 0"
-                       :list="list"></SearchSubjectList>
     <div class="history"
          v-else-if="searchItems.length > 0 && !keyword">
       <div class="history__hd">
@@ -43,35 +45,78 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import SearchSubjectList from '@/components/SearchSubjectList.vue';
 import { debounce } from '../utils/decorator';
-import Api from '../api';
+import api from '../api';
+
+// @ts-ignore
+import Scroll from '@/components/scroll';
 
 @Component({
   name: 'search',
   components: {
-    SearchSubjectList
+    SearchSubjectList,
+    Scroll
   }
 })
 export default class Search extends Vue {
   private keyword: string = '';
-  private searchItems: Array<string> = [];
-  private list: Array<any> = [];
+  private searchItems: string[] = [];
+  private list: Types.ISubject[] = [];
+
   private loading: boolean = false;
+
+  private scroll!: Scroll;
+  private page: number = 1;
+  private pageSize: number = 10;
+  private noMore: Boolean = false;
+  
+  private isPullUpLoad: Boolean = false;
+  private pullUpLoadObj: Object = {
+    threshold: 20
+  };
+
+  get searchOptions(): Types.ISearchOptions {
+    return {
+      keywords: this.keyword,
+      max_results: this.pageSize,
+      start: (this.page - 1) * this.pageSize,
+      type: 2,
+      responseGroup: 'large'
+    };
+  }
+
+  mounted() {
+    this.refreshSearchHistory();
+  }
+
+  initScroll() {
+    this.scroll = this.$refs.scroll as Scroll;
+    this.scroll.initScroll();
+  }
 
   @debounce(1000)
   async change() {
-    const keyword = this.keyword;
+    this.page = 1;
     this.loading = true;
     try {
-      const data = await Api.search(keyword);
-      this.loading = false;
+      const data = await api.search(this.searchOptions);
+      this.page++;
+
       if (data.list) {
-        this.list = data.list;
+        this.list.splice(0, this.list.length, ...data.list);
       } else {
         this.list = [];
       }
+
+      this.noMore = !this.list.length;
     } catch (error) {
       console.log(error);
+    } finally {
+      this.loading = false;
     }
+
+    this.$nextTick(() => {
+      this.initScroll();
+    });
   }
 
   submit() {
@@ -108,8 +153,36 @@ export default class Search extends Vue {
     this.$router.go(-1);
   }
 
-  mounted() {
-    this.refreshSearchHistory();
+  async fetch() {
+    if (this.noMore) {
+      return;
+    }
+
+    const data = await api.search(this.searchOptions);
+
+    const list: Types.ISubject[] = data.list;
+
+    if (!list.length) {
+      this.noMore = true;
+      return;
+    }
+
+    this.page++;
+    this.list = [...this.list, ...list];
+  }
+
+  async onPullingUp() {
+    if (this.isPullUpLoad) {
+      return;
+    }
+
+    this.isPullUpLoad = true;
+    await this.fetch();
+    this.isPullUpLoad = false;
+
+    this.$nextTick(() => {
+      this.scroll.forceUpdate();
+    });
   }
 }
 </script>
@@ -119,6 +192,13 @@ export default class Search extends Vue {
   .input {
     color: #fff !important;
   }
+
+  .search-content {
+    width: 100%;
+    height: calc(100vh - 48px);
+    padding: 4px;
+  }
+
   .history {
     margin-top: 12px;
     &__hd {

@@ -11,8 +11,8 @@
                :style="{ backgroundImage: `url(${item.images ? (item.images.large || item.images.common || '') : ''})` }"></div>
           <div class="subject__infos">
             <div class="subject__title">
-              <span class="subject__name--cn">{{ item.name_cn || '' }}</span>
-              <span class="subject__name">{{ item.name || '' }}</span>
+              <span class="subject__name--cn ellipsis">{{ item.name_cn || '' }}</span>
+              <span class="subject__name ellipsis">{{ item.name || '' }}</span>
             </div>
             <div class="subject__keywords">
               {{ item.summary }}
@@ -41,8 +41,8 @@ import Rate from './Rate.vue';
   }
 })
 export default class SearchSubjectList extends Vue {
-  @Prop({ type: Array, default: [] })
-  list!: Array<any>;
+  @Prop({ default: () => [] })
+  list!: Types.ISubject[];
 
   enter(id: number | string) {
     this.$router.push(`/subject/${id}`);
@@ -51,7 +51,7 @@ export default class SearchSubjectList extends Vue {
 </script>
 
 <style lang="scss" scoped>
-$fontSize: 14px;
+$fontSize: 12px;
 
 .subject-list {
   padding-top: 6px;
@@ -103,26 +103,35 @@ $fontSize: 14px;
 
   &__name {
     display: block;
-    font-size: 14px;
+    font-size: 10px;
     color: #ccc;
   }
 
   &__name--cn {
     display: block;
-    font-size: 16px;
+    font-size: 14px;
     color: #111;
   }
 
   &__keywords {
-    margin: 8px 0;
-    max-height: 3em;
+    display: -webkit-box;
+    white-space: normal;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    margin-top: 8px;
+    padding-right: 20px;
+    max-height: 6em;
+    font-size: 10px;
+    line-height: 1.6;
     overflow: hidden;
   }
 
   &__rating {
-    font-size: 12px;
+    font-size: 10px;
+    height: 14px;
     line-height: 14px;
     color: #aaa;
+    margin-top: 15px;
   }
 
   &__rank {
@@ -130,9 +139,10 @@ $fontSize: 14px;
     top: 0;
     right: 12px;
     width: 40px;
-    height: 18px;
-    border-radius: 4px;
-    line-height: 18px;
+    height: 16px;
+    border-radius: 10px;
+    font-size: 12px;
+    line-height: 16px;
     text-align: center;
     color: #fff;
     background: pink;

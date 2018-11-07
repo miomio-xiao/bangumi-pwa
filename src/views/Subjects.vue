@@ -53,6 +53,10 @@
              v-else>暂无更多信息</div>
       </div>
       <div class="crt">
+        <h3 class="sub">章节</h3>
+        <SubjectEp :ep-list="subject.eps"></SubjectEp>
+      </div>
+      <div class="crt">
         <h3 class="sub">角色</h3>
         <SubjectCharactor v-if="subject.crt"
                           :charactors="subject.crt"></SubjectCharactor>
@@ -66,28 +70,34 @@
         <div class="null-alert"
              v-else>暂无更多信息</div>
       </div>
+      <div class="comments">
+        <h3 class="sub">吐槽</h3>
+        <SubjectComments :comments="comments"></SubjectComments>
+        <v-btn block
+               color="#ff9dbe"
+               @click="enterCommentPage"
+               dark>查看更多吐槽</v-btn>
+      </div>
     </div>
     <v-dialog v-model="showChart"
               fullscreen
               transition="dialog-bottom-transition"
-              :overlay="false"
               lazy>
       <subject-chart :subject="subject"></subject-chart>
     </v-dialog>
   </div>
-  <div class="loading"
-       v-else>
-    <v-progress-circular indeterminate
-                         :width="3"
-                         color="pink"></v-progress-circular>
-  </div>
+  <Loading v-else
+           :full="true" />
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import Rate from '@/components/Rate.vue';
+import Loading from '@/components/Loading.vue';
 import SubjectCharactor from '@/components/SubjectCharactor/index.vue';
+import SubjectEp from '@/components/SubjectEp/index.vue';
 import SubjectBlog from '@/components/SubjectBlog/index.vue';
+import SubjectComments from '@/components/SubjectComments/index.vue';
 import SubjectChart from '@/components/SubjectChart/index.vue';
 import api from '@/api';
 
@@ -95,18 +105,26 @@ import api from '@/api';
   name: 'subjects',
   components: {
     Rate,
+    Loading,
     SubjectChart,
     SubjectCharactor,
-    SubjectBlog
+    SubjectEp,
+    SubjectBlog,
+    SubjectComments
   }
 })
 export default class Subjects extends Vue {
+  private id: string = '';
   private subject!: Types.ISubject;
+  private comments: Types.ISubjectComment[] = [];
+
   private loading: boolean = false;
+  private showComments: boolean = false;
   private showChart: boolean = false;
   private showRank: boolean = false;
   private showStaffsDetail: boolean = false;
   private summaryMore: boolean = false;
+
   private title: string = '详情';
 
   get score(): number {
@@ -139,11 +157,13 @@ export default class Subjects extends Vue {
   get staffsDetail(): string {
     const staffs = this.subject.staff;
     if (staffs && staffs.length > 0) {
-      return staffs.map(staff => {
-        const name = staff.name || staff.name_cn;
-        const jobs = staff.jobs || [];
-        return `${name} : ${jobs.join(' / ')}`;
-      }).join('</br>');
+      return staffs
+        .map(staff => {
+          const name = staff.name || staff.name_cn;
+          const jobs = staff.jobs || [];
+          return `${name} : ${jobs.join(' / ')}`;
+        })
+        .join('</br>');
     } else {
       return '';
     }
@@ -162,30 +182,35 @@ export default class Subjects extends Vue {
     this.$router.go(-1);
   }
 
+  enterCommentPage() {
+    this.$router.push(`/comments/${this.id}`);
+  }
+
   showSheet() {
     this.showChart = true;
   }
 
-  async beforeRouterEach() {
-    const id: string = this.$route.params.id;
-    try {
-      const data = await api.getSubjectById(id);
-      this.subject = data;
-    } catch (error) {
-      console.log(error);
-    }
+  async fetchComments() {
+    this.comments = await api.getSubjectCommentsById(this.id);
+  }
+
+  async fetchSubject() {
+    this.subject = await api.getSubjectById(this.id, 'large');
   }
 
   async created() {
     this.loading = true;
-    const id: string = this.$route.params.id;
+    this.id = this.$route.params.id;
+
     try {
-      const data = await api.getSubjectById(id, 'large');
-      this.subject = data;
-      this.loading = false;
+      await this.fetchSubject();
     } catch (error) {
       console.log(error);
+    } finally {
+      this.loading = false;
     }
+
+    this.fetchComments();
   }
 }
 </script>
@@ -196,8 +221,8 @@ export default class Subjects extends Vue {
   min-height: 100vh;
   background: #fff;
   & /deep/ {
-    .dialog--fullscreen {
-      height: 92%;
+    .v-dialog--fullscreen {
+      height: calc(100% - 56px);
       bottom: 0;
       top: auto;
     }
@@ -321,7 +346,7 @@ header {
 
 .sub {
   font-weight: normal;
-  padding: 0 0 10px;
+  padding: 10px 0;
   color: #aaa;
 }
 

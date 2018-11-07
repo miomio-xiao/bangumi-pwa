@@ -14,6 +14,7 @@
 
     <chart :options="lineOptions"
            :init-options="initOptions"
+           v-show="showReviewChart"
            theme="light"
            ref="reviewChart"
            class="chart"></chart>
@@ -34,7 +35,10 @@ interface VECharts extends Element {
 
 @Component
 export default class SubjectChart extends Vue {
-  @Prop() subject!: Types.ISubject;
+  @Prop()
+  subject!: Types.ISubject;
+
+  private showReviewChart: Boolean = true;
 
   private initOptions: Object = { renderer: 'svg' };
 
@@ -148,6 +152,7 @@ export default class SubjectChart extends Vue {
         maskColor: 'rgba(255, 255, 255, 0.4)'
       });
       const { people, rank, score, time } = await api.review({ id });
+
       const peopleRange = this.getRange(people);
       const rankRange = this.getRange(rank);
       const scoreRange = this.getRange(score);
@@ -187,6 +192,7 @@ export default class SubjectChart extends Vue {
       });
     } catch (error) {
       console.log(error);
+      this.showReviewChart = false;
     }
   }
 

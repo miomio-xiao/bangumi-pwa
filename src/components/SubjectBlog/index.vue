@@ -37,7 +37,7 @@ export default class SubjectBlog extends Vue {
 <style lang="scss" scoped>
 .blog {
   &__item {
-    height: 150px;
+    max-height: 150px;
     margin-bottom: 10px;
     line-height: 1.4em;
     box-shadow: 0px 2px 1px -1px rgba(180, 160, 120, 0.6);
@@ -85,7 +85,7 @@ export default class SubjectBlog extends Vue {
     padding-top: 4px;
     font-size: 12px;
     line-height: 1.4em;
-    height: 90px;
+    max-height: 90px;
     overflow: hidden;
     color: #888;
   }

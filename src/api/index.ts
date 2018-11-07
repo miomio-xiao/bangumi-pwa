@@ -5,22 +5,22 @@ export default class Api {
    * 每日放送
    */
   public static async getCalendars(): Promise<any> {
-    return get('api/calendar');
+    return get('bgm/calendar');
   }
 
   /**
    * 搜索
    *
-   * @param {string} keywords
-   *
+   * @static
+   * @param {Types.ISearchOptions} options
+   * @returns {Promise<any>}
+   * @memberof Api
    */
-  public static async search(keywords: string): Promise<any> {
-    keywords = encodeURIComponent(keywords);
-    return get(`api/search/subject/${keywords}`, {
-      type: 2,
-      responseGroup: 'large'
-    });
+  public static async search(options: Types.ISearchOptions): Promise<any> {
+    const keywords = encodeURIComponent(options.keywords);
+    return get(`bgm/search/subject/${keywords}`, options);
   }
+
   /**
    * 条目信息
    *
@@ -31,16 +31,43 @@ export default class Api {
     id: number | string,
     responseGroup: string = 'small'
   ): Promise<any> {
-    return get(`api/subject/${id}`, {
+    return get(`bgm/subject/${id}`, {
       responseGroup
     });
   }
+
+  /**
+   * 条目吐槽
+   *
+   * @param {(number | string)} id
+   * @param {number} page
+   *
+   */
+  public static async getSubjectCommentsById(
+    id: number | string,
+    page: number = 1
+  ): Promise<any> {
+    return get(`subject/${id}/comments`, {
+      page
+    });
+  }
+
+  /**
+   * 条目吐槽
+   *
+   * @param {(number | string)} id
+   *
+   */
+  public static async getEpInfo(id: number | string): Promise<any> {
+    return get(`ep/${id}`);
+  }
+
   /**
    * 查看历史数据
    *
    * @param {Types.IReviewOptions} options
    */
   public static async review(options: Types.IReviewOptions): Promise<any> {
-    return get(`bgmtools/review/api`, options);
+    return get(`/review`, options);
   }
 }

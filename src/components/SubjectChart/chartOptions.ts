@@ -1,4 +1,4 @@
-import { LinearGradient } from 'echarts/lib/util/graphic';
+import * as echarts from 'echarts/lib/echarts';
 export const scoreArr: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 export const reviewLegend: Array<string> = ['people', 'rank', 'score'];
 
@@ -9,7 +9,7 @@ export default class ChartOptions {
       type: 'category',
       data: scoreArr,
       axisTick: {
-        alignWithLabel: true
+        alignWithLabel: true  
       }
     },
     yAxis: {
@@ -31,14 +31,14 @@ export default class ChartOptions {
         },
         itemStyle: {
           normal: {
-            color: new LinearGradient(0, 0, 0, 1, [
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               { offset: 0, color: '#83bff6' },
               { offset: 0.5, color: '#188df0' },
               { offset: 1, color: '#188df0' }
             ])
           },
           emphasis: {
-            color: new LinearGradient(0, 0, 0, 1, [
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               { offset: 0, color: '#2378f7' },
               { offset: 0.7, color: '#2378f7' },
               { offset: 1, color: '#83bff6' }

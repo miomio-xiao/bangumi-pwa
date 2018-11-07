@@ -2,6 +2,7 @@
   max-width: 100vw;
   min-width: 100vw;
   overflow: hidden;
+
   &__title {
     display: inline-block;
     font-size: 18px;
@@ -11,20 +12,13 @@
   }
 }
 
-.loading {
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-}
-
 .null-alert {
   display: inline-block;
   width: 100%;
   text-align: center;
   padding: 8px;
   color: #ffc107;
+
   &::before {
     display: inline-block;
     content: '';
@@ -46,6 +40,12 @@
   }
 }
 
-li {
-  list-style-type: none;
+.full-screen {
+  height: calc(100vh - 56px) !important;
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
 }

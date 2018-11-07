@@ -18,14 +18,16 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import Rate from '@/components/Rate.vue';
+
 @Component({
+  name: 'WeekdaySubjectItem',
   components: {
     Rate
   }
 })
 export default class WeekdaySubjectItem extends Vue {
   @Prop()
-  subject!: Types.ISubject
+  subject!: Types.ISubject;
 
   get score() {
     if (this.subject.rating) {
@@ -36,7 +38,11 @@ export default class WeekdaySubjectItem extends Vue {
   }
 
   get image() {
-    return this.subject.images.large;
+    if (!this.subject.images) {
+      return '';
+    }
+
+    return this.subject.images.common || this.subject.images.large;
   }
 
   starStatus(pos: number, score: number): string {
@@ -53,7 +59,6 @@ export default class WeekdaySubjectItem extends Vue {
   enter() {
     this.$router.push(`/subject/${this.subject.id}`);
   }
-
 }
 </script>
 

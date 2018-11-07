@@ -36,6 +36,28 @@ export interface ISubjectBlog {
   user: Types.IUser;
 }
 
+export interface ISubjectComment {
+  name: string;
+  avatar: string;
+  ago: string;
+  content: string;
+  startNum: number;
+}
+
+export interface ISubjectEpInfo {
+  airdate: string;
+  comment: number;
+  desc: string;
+  duration: string;
+  id: number;
+  name: string;
+  name_cn: string;
+  sort: number;
+  status: string;
+  type: number;
+  url: string;
+}
+
 export interface ISubject {
   id: number;
   type: number | string;
@@ -49,10 +71,11 @@ export interface ISubject {
   rank?: number;
   collection?: ISubjectCollection;
   summary?: string;
-  staff?: Array<any>;
+  eps?: ISubjectEpInfo[];
+  staff?: any[];
 }
 
 export interface ICalendar {
-  items: Array<any>;
+  items: any[];
   weekday: any;
 }

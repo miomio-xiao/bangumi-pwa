@@ -1,8 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
-import Subjects from './views/Subjects.vue';
-import Search from './views/Search.vue';
 
 Vue.use(Router);
 
@@ -11,17 +8,31 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: () => import(/* webpackChunkName: "Home" */ './views/Home.vue')
     },
     {
       path: '/subject/:id',
       name: 'subject',
-      component: Subjects
+      component: () =>
+        import(/* webpackChunkName: "Subjects" */ './views/Subjects.vue')
+    },
+    {
+      path: '/comments/:id',
+      name: 'comments',
+      component: () =>
+        import(/* webpackChunkName: "Comments" */ './views/Comments.vue')
+    },
+    {
+      path: '/ep/:id',
+      name: 'ep',
+      component: () =>
+        import(/* webpackChunkName: "EpInfo" */ './views/EpInfo.vue')
     },
     {
       path: '/search',
       name: 'search',
-      component: Search
+      component: () =>
+        import(/* webpackChunkName: "Search" */ './views/Search.vue')
     }
   ]
 });

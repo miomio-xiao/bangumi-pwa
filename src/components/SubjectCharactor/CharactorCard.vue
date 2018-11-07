@@ -16,7 +16,9 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-@Component
+@Component({
+  name: 'CharactorCard'
+})
 export default class CharactorCard extends Vue {
   @Prop({ type: Object, default: [] })
   charactor!: Types.ISubjectCharactor;
@@ -29,7 +31,7 @@ export default class CharactorCard extends Vue {
   }
 
   get image(): string {
-    return this.charactor.images.grid || '';
+    return (this.charactor.images && this.charactor.images.grid) || '';
   }
 }
 </script>

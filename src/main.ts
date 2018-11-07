@@ -15,8 +15,11 @@ import App from './App.vue';
 import router from './router';
 import './registerServiceWorker.ts';
 import 'vuetify/dist/vuetify.min.css';
+import 'reset-css';
 
 import VueLazyload from 'vue-lazyload';
+import Loading from '@/components/Loading.vue';
+
 Vue.use(VueLazyload, {
   preLoad: 1.3,
   error: require('@/assets/imgs/404.jpg'),
@@ -27,6 +30,7 @@ Vue.use(VueLazyload, {
 Vue.config.productionTip = false;
 
 Vue.use(Vuetify);
+Vue.component('loading', Loading);
 Vue.component('chart', ECharts);
 
 new Vue({
