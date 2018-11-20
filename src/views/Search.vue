@@ -1,19 +1,14 @@
 <template>
   <div class="search-page">
-    <v-toolbar dark
-               color="pink">
-      <v-btn icon
-             @click="back()">
-        <v-icon>arrow_back</v-icon>
-      </v-btn>
+    <Header hasBack>
       <v-text-field append-icon="search"
                     class="input"
                     hide-details
                     single-line
                     v-model="keyword"
                     @input="change"
-                    @keyup.enter="submit"></v-text-field>
-    </v-toolbar>
+                    @keyup.enter="submit" />
+    </Header>
     <loading v-if="loading"
              :full="true" />
     <div class="search-content"
@@ -43,9 +38,10 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import Header from '@/components/Header/index.vue';
 import SearchSubjectList from '@/components/SearchSubjectList.vue';
-import { debounce } from '../utils/decorator';
-import api from '../api';
+import { debounce } from '@/utils/decorator';
+import api from '@/api';
 
 // @ts-ignore
 import Scroll from '@/components/scroll';
@@ -53,6 +49,7 @@ import Scroll from '@/components/scroll';
 @Component({
   name: 'search',
   components: {
+    Header,
     SearchSubjectList,
     Scroll
   }
@@ -68,7 +65,7 @@ export default class Search extends Vue {
   private page: number = 1;
   private pageSize: number = 10;
   private noMore: Boolean = false;
-  
+
   private isPullUpLoad: Boolean = false;
   private pullUpLoadObj: Object = {
     threshold: 20
@@ -90,7 +87,9 @@ export default class Search extends Vue {
 
   initScroll() {
     this.scroll = this.$refs.scroll as Scroll;
-    this.scroll.initScroll();
+    if (this.scroll) {
+      this.scroll.initScroll();
+    }
   }
 
   @debounce(1000)
@@ -187,9 +186,10 @@ export default class Search extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="stylus" scoped>
 .search-page {
   .input {
+    padding-top: 0 !important;
     color: #fff !important;
   }
 
@@ -201,18 +201,20 @@ export default class Search extends Vue {
 
   .history {
     margin-top: 12px;
+
     &__hd {
       display: flex;
       font-size: 18px;
       padding: 8px 16px;
       text-align: left;
-      color: #ccc;
+      color: #909090;
       font-weight: normal;
     }
 
     &__title {
       flex: 1;
     }
+
     &__clear {
       flex: 0 0 40px;
     }
@@ -223,7 +225,7 @@ export default class Search extends Vue {
       margin: 0 6px;
       border-bottom: 1px solid #e5e5e5;
       font-size: 18px;
-      color: #111;
+      color: #323232;
     }
   }
 }

@@ -1,16 +1,10 @@
 <template>
   <div class="page"
        v-if="!loading">
-    <v-toolbar dark
-               color="pink">
-      <v-btn icon
-             @click="back()">
-        <v-icon>arrow_back</v-icon>
-      </v-btn>
-      <h1 class="page__title">{{ subject.name_cn || subject.name }}</h1>
-    </v-toolbar>
-    <header>
-      <div class="bg"
+    <Header hasBack
+            :title="subject.name_cn || subject.name" />
+    <div class="page__header">
+      <div class="page__bg"
            :style="{ backgroundImage: `url(${image})` }"></div>
       <div class="subject">
         <div class="subject__poster"
@@ -21,11 +15,11 @@
             <p>{{ subject.name }}</p>
           </div>
           <div @click="showSheet">
-            <span class="score">{{ score }}</span>
+            <span class="subject__score">{{ score }}</span>
             <div class="subject__rating">
               <Rate :num="score"
-                    :size="16"></Rate>
-              <div class="total">{{ total }} 人评分</div>
+                    :size="16" />
+              <div class="subject__rating-total">{{ total }} 人评分</div>
             </div>
           </div>
         </div>
@@ -35,12 +29,12 @@
           <span v-show="showRank">{{ subject.rank }}</span>
         </div>
       </div>
-    </header>
-    <div class="info">
+    </div>
+    <div class="page__content">
       <p>放送日期: {{ subject.air_date }}</p>
       <p :class="{ staff : !showStaffsDetail }"
          @click="showStaffsDetail = !showStaffsDetail"
-         v-html="showStaffsDetail ? staffsDetail : staffs"></p>
+         v-html="showStaffsDetail ? staffsDetail : staffs" />
       <div class="summary">
         <h3 class="sub">剧情简介</h3>
         <div class="content"
@@ -50,47 +44,63 @@
              v-html="summary">
         </div>
         <div class="null-alert"
-             v-else>暂无更多信息</div>
+             v-else>
+          暂无更多信息
+        </div>
       </div>
       <div class="crt">
         <h3 class="sub">角色</h3>
         <SubjectCharactor v-if="subject.crt"
-                          :charactors="subject.crt"></SubjectCharactor>
+                          :charactors="subject.crt" />
         <div class="null-alert"
              v-else>暂无更多信息</div>
       </div>
       <div class="crt">
         <h3 class="sub">站点</h3>
         <SubjectResource v-if="siteList.length"
-                         :site-list="siteList"></SubjectResource>
+                         :site-list="siteList" />
         <div class="null-alert"
-             v-else>暂无更多信息</div>
+             v-else>
+          暂无更多信息
+        </div>
       </div>
       <div class="crt">
-        <h3 class="sub">章节</h3>
-        <SubjectEp :ep-list="subject.eps"></SubjectEp>
+        <h3 class="sub">章节讨论</h3>
+        <SubjectEp v-if="subject.eps"
+                   :ep-list="subject.eps" />
+        <div class="null-alert"
+             v-else>
+          暂无更多信息
+        </div>
       </div>
       <div class="blog">
-        <h3 class="sub">评论</h3>
+        <h3 class="sub">长评</h3>
         <SubjectBlog :blogs="subject.blog"
-                     v-if="subject.blog"></SubjectBlog>
+                     v-if="subject.blog" />
         <div class="null-alert"
              v-else>暂无更多信息</div>
       </div>
       <div class="comments">
-        <h3 class="sub">吐槽</h3>
-        <SubjectComments :comments="comments"></SubjectComments>
-        <v-btn block
-               color="#ff9dbe"
-               @click="enterCommentPage"
-               dark>查看更多吐槽</v-btn>
+        <h3 class="sub">短评</h3>
+        <template v-if="comments.length">
+          <SubjectComments :comments="comments" />
+          <v-btn block
+                color="secondary"
+                @click="enterCommentPage"
+                dark>
+            查看更多短评
+          </v-btn>
+        </template>
+        <div class="null-alert"
+             v-else>暂无更多信息</div>
       </div>
     </div>
     <v-dialog v-model="showChart"
               fullscreen
               transition="dialog-bottom-transition"
+              content-class="dialog-toolbar--fullscreen"
               lazy>
-      <subject-chart :subject="subject"></subject-chart>
+      <subject-chart :subject="subject" />
     </v-dialog>
   </div>
   <Loading v-else
@@ -101,6 +111,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import Rate from '@/components/Rate.vue';
 import Loading from '@/components/Loading.vue';
+import Header from '@/components/Header/index.vue';
 import SubjectCharactor from '@/components/SubjectCharactor/index.vue';
 import SubjectEp from '@/components/SubjectEp/index.vue';
 import SubjectResource from '@/components/SubjectResource/index.vue';
@@ -114,6 +125,7 @@ import api from '@/api';
   components: {
     Rate,
     Loading,
+    Header,
     SubjectChart,
     SubjectCharactor,
     SubjectEp,
@@ -123,19 +135,19 @@ import api from '@/api';
   }
 })
 export default class Subjects extends Vue {
-  private id: string = '';
-  private subject!: Types.ISubject;
-  private comments: Types.ISubjectComment[] = [];
-  private siteList: Types.ISubjectResourceInfo[] = [];
+  id: string = '';
+  subject!: Types.ISubject;
+  comments: Types.ISubjectComment[] = [];
+  siteList: Types.ISubjectResourceInfo[] = [];
 
-  private loading: boolean = false;
-  private showComments: boolean = false;
-  private showChart: boolean = false;
-  private showRank: boolean = false;
-  private showStaffsDetail: boolean = false;
-  private summaryMore: boolean = false;
+  loading: boolean = false;
+  showComments: boolean = false;
+  showChart: boolean = false;
+  showRank: boolean = false;
+  showStaffsDetail: boolean = false;
+  summaryMore: boolean = false;
 
-  private title: string = '详情';
+  title: string = '详情';
 
   get score(): number {
     if (this.subject.rating) {
@@ -230,25 +242,13 @@ export default class Subjects extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.page {
-  width: 100vw;
-  min-height: 100vh;
-  background: #fff;
-  & /deep/ {
-    .v-dialog--fullscreen {
-      height: calc(100% - 56px);
-      bottom: 0;
-      top: auto;
-    }
-  }
-}
-
-header {
+<style lang="stylus" scoped>
+.page__header {
   position: relative;
   width: 100vw;
   height: 200px;
-  .bg {
+
+  .page__bg {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -256,6 +256,7 @@ header {
     background-size: cover;
     background-position: center;
   }
+
   .subject {
     position: relative;
     width: 100%;
@@ -274,6 +275,7 @@ header {
       background-size: cover;
       background-position: center;
     }
+
     &__info {
       position: absolute;
       left: 160px;
@@ -283,6 +285,7 @@ header {
 
     &__title {
       font-size: 22px;
+
       p {
         margin: 10px 0;
         width: 60vw;
@@ -300,36 +303,38 @@ header {
 
     &__rank {
       position: absolute;
-      top: 20px;
       right: 16px;
       width: 60px;
       height: 40px;
       font-size: 32px;
       font-style: oblique;
       color: #fff;
+
+      &-total {
+        color: #ccc;
+      }
     }
 
-    .total {
-      color: #ccc;
-    }
-
-    .score {
+    &__score {
       display: inline-block;
       font-size: 48px;
     }
   }
 }
 
-.info {
+.page__content {
   margin-top: 48px;
   padding: 0 10px;
   text-align: left;
+
   p {
     font-size: 14px;
     line-height: 1.6em;
   }
+
   .staff {
     position: relative;
+
     &::after {
       content: '';
       position: absolute;
@@ -341,43 +346,48 @@ header {
       pointer-events: none;
     }
   }
+
   .summary {
     margin-top: 12px;
+
     .content {
       font-size: 14px;
       line-height: 1.4em;
       transition: 0.3s ease-in-out;
     }
   }
-}
 
-.crt {
-  margin-top: 12px;
-}
+  .crt {
+    margin-top: 12px;
+  }
 
-.blog {
-  margin-top: 12px;
-}
+  .blog {
+    margin-top: 12px;
+  }
 
-.sub {
-  font-weight: normal;
-  padding: 10px 0;
-  color: #aaa;
-}
+  .sub {
+    font-weight: normal;
+    margin: 20px 0;
+    padding-left: 10px;
+    border-left: 2px solid #ff8b62;
+    color: #909090;
+  }
 
-.more {
-  position: relative;
-  max-height: 80px;
-  overflow: hidden;
-  &::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 25px;
-    background: linear-gradient(rgba(255, 255, 255, 0.001), #fff);
-    pointer-events: none;
+  .more {
+    position: relative;
+    max-height: 80px;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 25px;
+      background: linear-gradient(rgba(255, 255, 255, 0.001), #fff);
+      pointer-events: none;
+    }
   }
 }
 </style>

@@ -50,19 +50,18 @@ export default class SearchSubjectList extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-$fontSize: 12px;
-
+<style lang="stylus" scoped>
 .subject-list {
   padding-top: 6px;
 }
 
 .module {
   margin: 10px 0;
+
   &__title {
     padding: 5px;
     font-size: 16px;
-    color: #555;
+    color: #323232;
     text-align: left;
   }
 }
@@ -75,6 +74,7 @@ $fontSize: 12px;
   margin: 0 4px 10px 4px;
   border-bottom: 1px solid #e5e5e5;
   text-align: center;
+
   &__poster {
     flex: 0 0 100px;
     height: 140px;
@@ -93,7 +93,7 @@ $fontSize: 12px;
   &__title {
     text-align: left;
     max-width: 100%;
-    font-size: $fontSize;
+    font-size: 12px;
     line-height: 1.4em;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -104,13 +104,13 @@ $fontSize: 12px;
   &__name {
     display: block;
     font-size: 10px;
-    color: #ccc;
+    color: #909090;
   }
 
   &__name--cn {
     display: block;
     font-size: 14px;
-    color: #111;
+    color: #323232;
   }
 
   &__keywords {
@@ -124,13 +124,14 @@ $fontSize: 12px;
     font-size: 10px;
     line-height: 1.6;
     overflow: hidden;
+    color: #646464;
   }
 
   &__rating {
     font-size: 10px;
     height: 14px;
     line-height: 14px;
-    color: #aaa;
+    color: #909090;
     margin-top: 15px;
   }
 

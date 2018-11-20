@@ -1,14 +1,7 @@
 <template>
   <div class="page">
-    <v-toolbar dark
-               color="pink">
-      <h1 class="page__title">{{ title }}</h1>
-      <v-spacer></v-spacer>
-      <v-btn icon
-             to="/search">
-        <v-icon>search</v-icon>
-      </v-btn>
-    </v-toolbar>
+    <Header fixed
+            hasSearch />
     <ul class="calendar">
       <li v-for="(calendar, i) in calendars"
           :key="i"
@@ -23,17 +16,19 @@
 import { Component, Vue } from 'vue-property-decorator';
 import api from '../api';
 
+import Header from '@/components/Header/index.vue';
 import WeekdayCard from '@/components/WeekdayCard/index.vue';
 
 @Component({
   name: 'calendar',
   components: {
+    Header,
     WeekdayCard
   }
 })
 export default class Calendar extends Vue {
   private title: string = 'bangumi';
-  private calendars: Array<Types.ICalendar> = [];
+  private calendars: Types.ICalendar[] = [];
 
   async created() {
     try {
@@ -46,9 +41,11 @@ export default class Calendar extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="stylus" scoped>
 .calendar {
+  margin-top: 56px;
   background: #f5f5f5;
+
   &__list {
     flex: 1;
     margin-bottom: 10px;

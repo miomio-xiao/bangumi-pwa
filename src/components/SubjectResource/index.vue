@@ -81,7 +81,7 @@ export default class SubjectResource extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="stylus" scoped>
 .wrapper {
   width: 100vw;
   min-height: 32px;

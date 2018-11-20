@@ -13,8 +13,12 @@ import 'echarts/lib/theme/light';
 
 import App from './App.vue';
 import router from './router';
+
 import './registerServiceWorker.ts';
-import 'vuetify/dist/vuetify.min.css';
+// import 'vuetify/dist/vuetify.min.css';
+import { theme } from './styles/theme';
+import 'material-design-icons-iconfont/dist/material-design-icons.css';
+import './styles/index.styl';
 import 'reset-css';
 
 import VueLazyload from 'vue-lazyload';
@@ -29,7 +33,9 @@ Vue.use(VueLazyload, {
 
 Vue.config.productionTip = false;
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+  theme
+});
 Vue.component('loading', Loading);
 Vue.component('chart', ECharts);
 

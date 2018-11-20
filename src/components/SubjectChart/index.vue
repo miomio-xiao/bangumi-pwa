@@ -205,7 +205,7 @@ export default class SubjectChart extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style lang="stylus">
 .chart-area {
   position: absolute;
   background: rgba(255, 255, 255, 0.95);

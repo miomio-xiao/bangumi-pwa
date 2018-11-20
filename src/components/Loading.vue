@@ -2,7 +2,7 @@
   <div :class="cls">
     <v-progress-circular indeterminate
                          :width="3"
-                         color="pink" />
+                         color="primary" />
   </div>
 </template>
 
@@ -23,11 +23,11 @@ export default class Loading extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-@import '@/assets/mixin.scss';
-
+<style lang="stylus" scoped>
 .loading {
-  @include flex-center();
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &--full {
     width: 100vw;

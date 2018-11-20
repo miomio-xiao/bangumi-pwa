@@ -62,7 +62,7 @@ export default class WeekdaySubjectItem extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="stylus" scoped>
 .item {
   display: inline-block;
   vertical-align: top;

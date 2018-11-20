@@ -39,7 +39,7 @@ export default class Rate extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="stylus" scoped>
 .rating__stars {
   display: inline-block;
   .star {

@@ -1,14 +1,8 @@
 <template>
   <div class="page">
-    <v-toolbar dark
-               dense
-               color="pink">
-      <v-btn icon
-             @click="$router.go(-1)">
-        <v-icon>arrow_back</v-icon>
-      </v-btn>
-      <h1 class="page__title">全部吐槽</h1>
-    </v-toolbar>
+    <Header hasBack
+            :title="title">
+    </Header>
     <div class="comment"
          v-if="!loading">
       <ul class="comment-list">
@@ -57,6 +51,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import Header from '@/components/Header/index.vue';
 import Loading from '@/components/Loading.vue';
 import api from '@/api';
 
@@ -65,6 +60,7 @@ import Scroll from '@/components/scroll';
 
 @Component({
   components: {
+    Header,
     Loading,
     Scroll
   }
@@ -73,6 +69,7 @@ export default class EpInfo extends Vue {
   id: string = '';
   list: any[] = [];
 
+  title: string = '章节讨论';
   loading: boolean = false;
 
   async fetch() {
@@ -87,6 +84,7 @@ export default class EpInfo extends Vue {
     try {
       await this.fetch();
     } catch (error) {
+      console.log(error);
     } finally {
       this.loading = false;
     }
@@ -94,7 +92,7 @@ export default class EpInfo extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="stylus" scoped>
 .comment {
   padding: 0 8px;
   font-size: 12px;

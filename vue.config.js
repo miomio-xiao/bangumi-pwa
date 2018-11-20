@@ -10,13 +10,16 @@ module.exports = {
   },
   lintOnSave: false,
   pwa: {
-    workboxPluginMode: 'GenerateSW',
     workboxOptions: {
       importWorkboxFrom: 'local',
       cacheId: 'bangumi',
       globDirectory: 'dist',
-      globPatterns: ['*/*.{html,js,css,eot,svg,ttf,woff}'],
-      globIgnores: ['**/*.map'],
+      globPatterns: [
+        '*/*.{html,js,css,eot,svg,ttf,woff}'
+      ],
+      globIgnores: [
+        '**/*.map'
+      ],
       clientsClaim: true,
       skipWaiting: true,
       dontCacheBustUrlsMatching: /\.\w{8}\./,
@@ -28,13 +31,18 @@ module.exports = {
           cacheName: 'api-cache',
           expiration: {
             maxEntries: 50,
-            maxAgeSeconds: 60 * 60 * 24 * 7
+            maxAgeSeconds: 604800
           },
           cacheableResponse: {
-            statuses: [0, 200]
+            statuses: [
+              0,
+              200
+            ]
           }
         }
       }]
-    }
+    },
+    name: 'bangumi',
+    themeColor: '#f73e53'
   }
 };

@@ -1,14 +1,8 @@
 <template>
   <div class="page">
-    <v-toolbar dark
-               dense
-               color="pink">
-      <v-btn icon
-             @click="$router.go(-1)">
-        <v-icon>arrow_back</v-icon>
-      </v-btn>
-      <h1 class="page__title">全部吐槽</h1>
-    </v-toolbar>
+    <Header hasBack
+            :title="title"
+            class="header" />
     <div class="comment">
       <Scroll ref="scroll"
               :pullUpLoad="pullUpLoadObj"
@@ -21,6 +15,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import Header from '@/components/Header/index.vue';
 import SubjectComments from '@/components/SubjectComments/index.vue';
 import BScroll from 'better-scroll';
 import api from '@/api';
@@ -30,44 +25,61 @@ import Scroll from '@/components/scroll';
 
 @Component({
   components: {
+    Header,
     SubjectComments,
     Scroll
   }
 })
 export default class SubjectComment extends Vue {
   id: string = '';
+  title: string = '全部短评';
   page: number = 1;
   comments: Types.ISubjectComment[] = [];
 
   scroll!: Scroll;
 
-  pullUpLoadObj: Object = {
+  pullUpLoadObj: object = {
     threshold: 200
   };
 
-  noMore: Boolean = false;
+  isPullingUp: boolean = false;
+
+  noMore: boolean = false;
 
   async fetch() {
     if (this.noMore) {
       return;
     }
 
-    const comments: Types.ISubjectComment[] = await api.getSubjectCommentsById(
-      this.id,
-      this.page
-    );
+    try {
+      const comments: Types.ISubjectComment[] = await api.getSubjectCommentsById(
+        this.id,
+        this.page
+      );
 
-    if (!comments.length) {
-      this.noMore = true;
-      return;
+      if (!comments.length) {
+        this.noMore = true;
+        return;
+      }
+
+      this.page++;
+      this.comments = [...this.comments, ...comments];
+    } catch (error) {
+      console.log(error);
     }
-
-    this.page++;
-    this.comments = [...this.comments, ...comments];
   }
 
   async onPullingUp() {
+    if (this.isPullingUp) {
+      return;
+    }
+    
+    this.isPullingUp = true;
+    
     await this.fetch();
+
+    this.isPullingUp = false;
+    
     this.$nextTick(() => {
       this.scroll.forceUpdate();
     });
@@ -82,8 +94,11 @@ export default class SubjectComment extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-@import '@/assets/mixin.scss';
+<style lang="stylus" scoped>
+.header {
+  position: relative;
+  z-index: 9;
+}
 
 .comment {
   width: 100%;

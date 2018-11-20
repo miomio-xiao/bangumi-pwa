@@ -2,8 +2,7 @@
   <ul class="comment__list">
     <li v-for="(item, index) in comments"
         :key="index"
-        class="comment__item"
-        @click="entercomment(item)">
+        class="comment__item">
       <div class="comment__hd">
         <div class="comment__avatar">
           <img width="100%"
@@ -45,7 +44,7 @@ export default class SubjectComment extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="stylus" scoped>
 .comment {
   &__item {
     padding: 10px 0;
@@ -70,11 +69,11 @@ export default class SubjectComment extends Vue {
     flex: 1;
     align-self: center;
     padding-left: 10px;
-    color: #3f3f3f;
+    color: #323232;
   }
 
   &__age {
-    color: #666;
+    color: #909090;
   }
 
   &__star {
@@ -93,7 +92,7 @@ export default class SubjectComment extends Vue {
     font-size: 12px;
     line-height: 16px;
     overflow: hidden;
-    color: #888;
+    color: #646464;
   }
 }
 </style>
