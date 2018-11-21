@@ -1,8 +1,8 @@
 <template>
   <div class="page">
     <Header hasBack
-            :title="title"
-            class="header" />
+            relative
+            :title="title" />
     <div class="comment">
       <Scroll ref="scroll"
               :pullUpLoad="pullUpLoadObj"
@@ -73,13 +73,13 @@ export default class SubjectComment extends Vue {
     if (this.isPullingUp) {
       return;
     }
-    
+
     this.isPullingUp = true;
-    
+
     await this.fetch();
 
     this.isPullingUp = false;
-    
+
     this.$nextTick(() => {
       this.scroll.forceUpdate();
     });
@@ -95,11 +95,6 @@ export default class SubjectComment extends Vue {
 </script>
 
 <style lang="stylus" scoped>
-.header {
-  position: relative;
-  z-index: 9;
-}
-
 .comment {
   width: 100%;
   height: calc(100vh - 48px);

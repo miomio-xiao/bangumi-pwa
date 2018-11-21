@@ -86,7 +86,9 @@ export default class SearchSubjectList extends Vue {
   &__infos {
     position: relative;
     flex: 1;
+    width: 250px;
     margin-left: 12px;
+    padding-right: 8px;
     text-align: left;
   }
 
@@ -103,12 +105,14 @@ export default class SearchSubjectList extends Vue {
 
   &__name {
     display: block;
+    width: 200px;
     font-size: 10px;
     color: #909090;
   }
 
   &__name--cn {
     display: block;
+    width: 200px;
     font-size: 14px;
     color: #323232;
   }
@@ -119,7 +123,7 @@ export default class SearchSubjectList extends Vue {
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     margin-top: 8px;
-    padding-right: 20px;
+    padding-right: 12px;
     max-height: 6em;
     font-size: 10px;
     line-height: 1.6;

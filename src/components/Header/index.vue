@@ -2,6 +2,7 @@
   <v-toolbar dark
              dense
              :fixed="fixToolbar"
+             :class="cls"
              color="primary">
     <slot name="left">
       <v-btn v-if="hasBack"
@@ -42,8 +43,16 @@ export default class Calendar extends Vue {
   fixed?: boolean;
   @Prop({ type: Number, default: 0 })
   fixHeight?: number;
+  @Prop({ type: Boolean, default: false })
+  relative?: boolean;
 
   offsetTop: number = 0;
+
+  get cls(): object {
+    return {
+      'header--relative': this.relative
+    };
+  }
 
   get fixToolbar(): boolean {
     if (this.fixed) {
@@ -74,3 +83,10 @@ export default class Calendar extends Vue {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.header--relative {
+  position: relative;
+  z-index: 9;
+}
+</style>

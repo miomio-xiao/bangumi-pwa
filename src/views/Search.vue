@@ -1,6 +1,7 @@
 <template>
   <div class="search-page">
-    <Header hasBack>
+    <Header hasBack
+            relative>
       <v-text-field append-icon="search"
                     class="input"
                     hide-details
@@ -22,15 +23,19 @@
     <div class="history"
          v-else-if="searchItems.length > 0 && !keyword">
       <div class="history__hd">
-        <span class="history__title">历史记录</span>
-        <span class="history__clear"
-              @click="clearHistory">清除</span>
+        <span class="history__title">历史搜索</span>
+        <v-icon class="history__clear"
+                @click="clearHistory">delete</v-icon>
       </div>
       <ul class="history__items">
         <li class="history__item"
-            v-for="(item, i) in searchItems"
-            :key="i"
-            @click="keyword = item; change()">{{ item }}</li>
+            v-for="item in searchItems"
+            :key="item"
+            @click="clickHistory(item)">
+          <v-chip label
+                  color="accent"
+                  text-color="#fff">{{ item }}</v-chip>
+        </li>
       </ul>
     </div>
   </div>
@@ -55,27 +60,31 @@ import Scroll from '@/components/scroll';
   }
 })
 export default class Search extends Vue {
-  private keyword: string = '';
-  private searchItems: string[] = [];
-  private list: Types.ISubject[] = [];
+  keyword: string = '';
+  searchItems: string[] = [];
+  list: Types.ISubject[] = [];
 
-  private loading: boolean = false;
+  loading: boolean = false;
 
-  private scroll!: Scroll;
-  private page: number = 1;
-  private pageSize: number = 10;
-  private noMore: Boolean = false;
+  scroll!: Scroll;
+  page: number = 1;
+  pageSize: number = 10;
+  noMore: Boolean = false;
 
-  private isPullUpLoad: Boolean = false;
-  private pullUpLoadObj: Object = {
+  isPullUpLoad: Boolean = false;
+  pullUpLoadObj: Object = {
     threshold: 20
   };
+
+  get start(): number {
+    return (this.page - 1) * this.pageSize;
+  }
 
   get searchOptions(): Types.ISearchOptions {
     return {
       keywords: this.keyword,
       max_results: this.pageSize,
-      start: (this.page - 1) * this.pageSize,
+      start: this.start,
       type: 2,
       responseGroup: 'large'
     };
@@ -92,40 +101,14 @@ export default class Search extends Vue {
     }
   }
 
-  @debounce(1000)
-  async change() {
-    this.page = 1;
-    this.loading = true;
-    try {
-      const data = await api.search(this.searchOptions);
-      this.page++;
-
-      if (data.list) {
-        this.list.splice(0, this.list.length, ...data.list);
-      } else {
-        this.list = [];
-      }
-
-      this.noMore = !this.list.length;
-    } catch (error) {
-      console.log(error);
-    } finally {
-      this.loading = false;
-    }
-
-    this.$nextTick(() => {
-      this.initScroll();
-    });
-  }
-
   submit() {
     this.change();
     this.setSearchHistory(this.keyword);
   }
 
-  getSearchHistory(): Array<string> {
+  getSearchHistory(): string[] {
     let str = localStorage.getItem('searchHistory');
-    let searchs: Array<string> = [];
+    let searchs: string[] = [];
     if (str) {
       searchs = JSON.parse(str);
     }
@@ -133,7 +116,11 @@ export default class Search extends Vue {
   }
 
   setSearchHistory(keyword: string) {
-    let searchs: Array<string> = this.getSearchHistory();
+    let searchs: string[] = this.getSearchHistory();
+    if (!keyword || searchs.includes(keyword)) {
+      return;
+    }
+
     searchs.push(keyword);
     localStorage.setItem('searchHistory', JSON.stringify(searchs));
     this.refreshSearchHistory();
@@ -148,8 +135,37 @@ export default class Search extends Vue {
     this.searchItems = this.getSearchHistory();
   }
 
+  clickHistory(item: string) {
+    this.keyword = item;
+    this.change();
+  }
+
   back() {
     this.$router.go(-1);
+  }
+
+  @debounce(1000)
+  async change() {
+    this.page = 1;
+    this.noMore = false;
+
+    if (this.keyword === '') {
+      this.list = [];
+      return;
+    }
+
+    this.loading = true;
+    try {
+      await this.fetch();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.loading = false;
+    }
+
+    this.$nextTick(() => {
+      this.initScroll();
+    });
   }
 
   async fetch() {
@@ -157,17 +173,32 @@ export default class Search extends Vue {
       return;
     }
 
-    const data = await api.search(this.searchOptions);
+    try {
+      const data = await api.search(this.searchOptions);
 
-    const list: Types.ISubject[] = data.list;
+      const list: Types.ISubject[] = data.list;
+      const results: number = data.results;
 
-    if (!list.length) {
-      this.noMore = true;
-      return;
+      if (!results && this.page === 1) {
+        this.list = [];
+        return;
+      }
+
+      if (this.page === 1) {
+        this.list.splice(0, this.list.length, ...list);
+      } else {
+        this.list = [...this.list, ...list];
+      }
+
+      this.page++;
+
+      if (this.start > results) {
+        this.noMore = true;
+        return;
+      }
+    } catch (error) {
+      throw new Error(error);
     }
-
-    this.page++;
-    this.list = [...this.list, ...list];
   }
 
   async onPullingUp() {
@@ -219,13 +250,14 @@ export default class Search extends Vue {
       flex: 0 0 40px;
     }
 
+    &__items {
+      display: flex;
+      padding: 10px;
+    }
+
     &__item {
-      text-align: left;
-      padding: 8px 24px;
       margin: 0 6px;
-      border-bottom: 1px solid #e5e5e5;
       font-size: 18px;
-      color: #323232;
     }
   }
 }
