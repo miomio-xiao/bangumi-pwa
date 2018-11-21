@@ -7,11 +7,11 @@
         <div class="comment__avatar">
           <img width="100%"
                height="100%"
-               :src="item.avatar">
+               :src="item.user.avatar">
         </div>
         <span class="comment__title">
           <span class="comment__user">
-            {{ item.name }}
+            {{ item.user.name }}
           </span>
           <span class="comment__age">
             {{ item.age }}
@@ -40,7 +40,7 @@ import Rate from '@/components/Rate.vue';
 })
 export default class SubjectComment extends Vue {
   @Prop()
-  private comments!: Types.ISubjectComment[];
+  comments!: Types.ISubjectComment[];
 }
 </script>
 
@@ -61,6 +61,7 @@ export default class SubjectComment extends Vue {
     width: 32px;
     height: 32px;
     border-radius: 50%;
+    background: #909090;
     overflow: hidden;
   }
 

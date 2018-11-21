@@ -3,7 +3,7 @@ import axios from 'axios';
 // axios 配置
 const instance = axios.create({
   baseURL: 'api',
-  timeout: 10000,
+  timeout: 20000,
   responseType: 'json',
   withCredentials: true, // 是否允许带cookie这些
   headers: {

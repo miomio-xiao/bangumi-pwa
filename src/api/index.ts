@@ -63,6 +63,16 @@ export default class Api {
   }
 
   /**
+   * 长评信息
+   *
+   * @param {(number | string)} id
+   *
+   */
+  public static async getBlogInfo(id: number | string): Promise<any> {
+    return get(`blog/${id}`);
+  }
+
+  /**
    * 资源站点信息
    *
    * @param {(number | string)} id

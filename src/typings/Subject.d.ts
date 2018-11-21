@@ -37,8 +37,11 @@ export interface ISubjectBlog {
 }
 
 export interface ISubjectComment {
-  name: string;
-  avatar: string;
+  user: {
+    href: string;
+    name: string;
+    avatar: string;
+  };
   ago: string;
   content: string;
   startNum: number;
@@ -125,4 +128,39 @@ export interface ISubject {
 export interface ICalendar {
   items: any[];
   weekday: any;
+}
+
+export interface IComment {
+  id: string;
+  floor: string;
+  time: string;
+  user: {
+    avatar: string;
+    href: string;
+    name: string;
+  };
+  content: string;
+  sub?: IComment;
+}
+
+export interface IBlogInfoTag {
+  href: string;
+  text: string;
+}
+
+export interface IBlogInfo {
+  user: {
+    name: string;
+    href: string;
+    avatar: string;
+  };
+  title: string;
+  time: string;
+  content: string;
+  tag?: IBlogInfoTag[];
+}
+
+export interface IBlog {
+  blog: IBlogInfo;
+  comments: IComment[];
 }

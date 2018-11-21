@@ -5,44 +5,7 @@
     </Header>
     <div class="comment"
          v-if="!loading">
-      <ul class="comment-list">
-        <li class="comment-item"
-            v-for="item in list"
-            :key="item.id">
-          <div class="comment-item__side">
-            <div class="comment-item__avator">
-              <img width="100%"
-                   height="100%"
-                   :src="item.user.avatar"
-                   :alt="item.user.name">
-            </div>
-          </div>
-          <div class="comment-item__content">
-            <div class="comment-item__head">
-              <div class="comment-item__user">{{ item.user.name }}</div>
-              <div class="comment-item__floor">#{{ item.floor }}</div>
-              <div class="comment-item__itme">{{ item.time }}</div>
-            </div>
-            <div class="comment-item__message"
-                 v-html="item.content"></div>
-            <ul class="comment-sub"
-                v-if="item.sub && item.sub.length">
-              <li class="comment-sub-item"
-                  v-for="sub in item.sub"
-                  :key="sub.id">
-                <div class="comment-sub-item__head">
-                  <div class="comment-sub-item__user">{{ sub.user.name }}</div>
-                  <div class="comment-sub-item__time">{{ sub.time }}</div>
-                </div>
-                <div class="comment-sub-item__message"
-                     v-html="sub.content">
-
-                </div>
-              </li>
-            </ul>
-          </div>
-        </li>
-      </ul>
+      <Comments :list="list" />
     </div>
     <Loading v-else
              :full="true"></Loading>
@@ -50,30 +13,29 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import Header from '@/components/Header/index.vue';
 import Loading from '@/components/Loading.vue';
+import Comments from '@/components/Comments/index.vue';
 import api from '@/api';
 
-// @ts-ignore
-import Scroll from '@/components/scroll';
-
 @Component({
+  name: 'EpInfo',
   components: {
     Header,
-    Loading,
-    Scroll
+    Comments,
+    Loading
   }
 })
 export default class EpInfo extends Vue {
   id: string = '';
-  list: any[] = [];
+  list: Types.IComment[] = [];
 
   title: string = '章节讨论';
   loading: boolean = false;
 
   async fetch() {
-    const epInfo: any[] = await api.getEpInfo(this.id);
+    const epInfo: Types.IComment[] = await api.getEpInfo(this.id);
 
     this.list = epInfo;
   }
@@ -114,7 +76,7 @@ export default class EpInfo extends Vue {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: #f09199;
+    background: #909090;
     overflow: hidden;
   }
 
@@ -124,33 +86,33 @@ export default class EpInfo extends Vue {
 
   &__head {
     display: flex;
+    align-items: center;
     font-size: 10px;
     margin-bottom: 8px;
   }
 
   &__user {
     flex: 1;
-    color: #f09199;
+    font-size: 12px;
+    color: #f73e53;
   }
 
   &__floor {
     flex: 0 0 20px;
     margin: 0 6px;
-    color: #666;
+    text-align: right;
+    color: #909090;
   }
 
   &__time {
-    flex: 0 0 100px;
-    color: #666;
+    flex: 0 0 75px;
+    color: #909090;
     text-align: right;
   }
 
   &__message {
     line-height: 2;
-
-    & /deep/ img.code {
-      width: 100%;
-    }
+    color: #323232;
   }
 }
 
@@ -171,25 +133,19 @@ export default class EpInfo extends Vue {
 
   &__user {
     flex: 1;
-    color: #5a77e6;
+    color: #70a0e4;
   }
 
   &__time {
     flex: 0 0 100px;
-    color: #666;
+    color: #909090;
     text-align: right;
   }
 
   &__message {
     line-height: 1.6;
     padding: 4px;
-
-    & /deep/ .quote {
-      padding: 2px 8px;
-      margin: 8px 0;
-      border-left: 2px solid #eaeaea;
-      color: #7f8fa4;
-    }
+    color: #323232;
   }
 }
 </style>

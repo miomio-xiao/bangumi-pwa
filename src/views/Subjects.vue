@@ -76,6 +76,7 @@
       <div class="blog">
         <h3 class="sub">长评</h3>
         <SubjectBlog :blogs="subject.blog"
+                     @on-click="enterBlogPage"
                      v-if="subject.blog" />
         <div class="null-alert"
              v-else>暂无更多信息</div>
@@ -85,9 +86,9 @@
         <template v-if="comments.length">
           <SubjectComments :comments="comments" />
           <v-btn block
-                color="secondary"
-                @click="enterCommentPage"
-                dark>
+                 color="secondary"
+                 @click="enterCommentPage"
+                 dark>
             查看更多短评
           </v-btn>
         </template>
@@ -206,6 +207,17 @@ export default class Subjects extends Vue {
 
   enterCommentPage() {
     this.$router.push(`/comments/${this.id}`);
+  }
+
+  async enterBlogPage(item: Types.ISubjectBlog) {
+    const id = item.id;
+    this.$router.push({
+      name: 'Blog',
+      params: {
+        id: id + '',
+        name: this.subject.name_cn || this.subject.name
+      }
+    });
   }
 
   showSheet() {

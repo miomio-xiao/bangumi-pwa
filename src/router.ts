@@ -23,6 +23,12 @@ export default new Router({
         import(/* webpackChunkName: "Comments" */ './views/Comments.vue')
     },
     {
+      path: '/blog/:id',
+      name: 'Blog',
+      component: () =>
+        import(/* webpackChunkName: "Blog" */ './views/Blog.vue')
+    },
+    {
       path: '/ep/:id',
       name: 'ep',
       component: () =>
