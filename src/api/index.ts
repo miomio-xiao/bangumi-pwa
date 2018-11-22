@@ -9,6 +9,13 @@ export default class Api {
   }
 
   /**
+   * Top rank
+   */
+  public static async getTopRanks(num: number): Promise<any> {
+    return get(`rank/${num}`);
+  }
+
+  /**
    * 搜索
    *
    * @static

@@ -1,7 +1,5 @@
 <template>
   <div class="page">
-    <Header fixed
-            hasSearch />
     <ul class="calendar">
       <li v-for="(calendar, i) in calendars"
           :key="i"
@@ -16,13 +14,11 @@
 import { Component, Vue } from 'vue-property-decorator';
 import api from '../api';
 
-import Header from '@/components/Header/index.vue';
 import WeekdayCard from '@/components/WeekdayCard/index.vue';
 
 @Component({
   name: 'calendar',
   components: {
-    Header,
     WeekdayCard
   }
 })
@@ -43,9 +39,6 @@ export default class Calendar extends Vue {
 
 <style lang="stylus" scoped>
 .calendar {
-  margin-top: 56px;
-  background: #f5f5f5;
-
   &__list {
     flex: 1;
     margin-bottom: 10px;

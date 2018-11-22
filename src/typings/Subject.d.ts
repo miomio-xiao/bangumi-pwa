@@ -164,3 +164,14 @@ export interface IBlog {
   blog: IBlogInfo;
   comments: IComment[];
 }
+
+export interface IBrowserInfo {
+  id: number | string;
+  name: string;
+  oName: string;
+  cover: string;
+  info: string;
+  rank: number;
+  rate: number;
+  rateNum: number;
+}

@@ -32,7 +32,7 @@ import bus from '@/EventBus';
 @Component({
   name: 'Header'
 })
-export default class Calendar extends Vue {
+export default class Header extends Vue {
   @Prop({ type: String, default: 'bangumi' })
   title?: string;
   @Prop({ type: Boolean, default: false })
