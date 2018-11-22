@@ -6,10 +6,6 @@
              scroll-off-screen
              class="home-toolbar"
              color="primary">
-    <v-btn icon
-           @click="back()">
-      <v-icon>arrow_back</v-icon>
-    </v-btn>
     <h1 class="page__title ellipsis">{{ title }}</h1>
     <v-spacer></v-spacer>
     <v-btn icon
@@ -39,7 +35,7 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
   name: 'HomeToolbar'
 })
 export default class HomeToolbar extends Vue {
-  @Prop({ type: String, default: 'bangumi' })
+  @Prop({ type: String, default: 'Bangumi' })
   title?: string;
   @Prop()
   tab!: string;
@@ -51,10 +47,6 @@ export default class HomeToolbar extends Vue {
   @Watch('curTab')
   curTabWatch(tab: string) {
     this.$emit('update:tab', tab);
-  }
-
-  back() {
-    this.$router.go(-1);
   }
 }
 </script>

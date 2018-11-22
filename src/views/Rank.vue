@@ -136,7 +136,7 @@ export default class Rank extends Vue {
     flex-direction: column;
     flex: 1;
     width: 220px;
-    padding: 4px 6px 0 12px;
+    padding: 0 6px 0 12px;
     font-size: 12px;
   }
 
