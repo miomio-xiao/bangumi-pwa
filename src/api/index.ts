@@ -16,6 +16,29 @@ export default class Api {
   }
 
   /**
+   * 动画浏览列表
+   */
+  public static async getBrowserList({
+    type = 'all',
+    airtime,
+    page = 1,
+    sort
+  }: {
+    type?: string;
+    airtime?: string;
+    page: number;
+    sort: string;
+  }): Promise<any> {
+    const url = `browser/${type}/${
+      airtime ? airtime + '/' : ''
+    }`;
+    return get(url, {
+      page,
+      sort
+    });
+  }
+
+  /**
    * 搜索
    *
    * @static

@@ -12,14 +12,16 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HomeToolbar from '@/components/Home/toolbar.vue';
+import HomeToolbar from '@/components/Home/Toolbar.vue';
 import Calendar from '@/views/Calendar.vue';
 import Rank from '@/views/Rank.vue';
+import Collections from '@/components/Home/Collections.vue';
 
 @Component({
   name: 'home',
   components: {
     HomeToolbar,
+    Collections,
     Calendar,
     Rank
   }
@@ -33,7 +35,7 @@ export default class Home extends Vue {
     },
     {
       label: '榜单',
-      value: 'Rank'
+      value: 'Collections'
     }
   ];
 }
