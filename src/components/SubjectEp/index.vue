@@ -8,7 +8,7 @@
           :style="listStyles">
         <li v-for="item in epList"
             :key="item.id"
-            v-show="item.name"
+            v-show="item.id"
             @click="$router.push(`/ep/${item.id}`)"
             ref="item"
             class="ep">
@@ -42,7 +42,7 @@ export default class SubjectEp extends Vue {
   scroll: Scroll;
 
   get itemTotalWidth() {
-    const width = this.epList.filter(item => item.name).length * this.itemWidth;
+    const width = this.epList.filter(item => item.id).length * this.itemWidth;
 
     return width + 40;
   }

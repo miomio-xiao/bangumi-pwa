@@ -101,7 +101,7 @@ export default class Comments extends Vue {
   }
 
   &__time {
-    flex: 0 0 80px;
+    flex: 0 0 90px;
     color: #909090;
     text-align: right;
   }
@@ -133,7 +133,7 @@ export default class Comments extends Vue {
   }
 
   &__time {
-    flex: 0 0 100px;
+    flex: 0 0 90px;
     color: #909090;
     text-align: right;
   }
