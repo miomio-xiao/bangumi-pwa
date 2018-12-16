@@ -81,6 +81,22 @@ export default class Api {
       page
     });
   }
+  
+  /**
+   * 条目全部长评
+   *
+   * @param {(number | string)} id
+   * @param {number} page
+   *
+   */
+  public static async getSubjectBlogsById(
+    id: number | string,
+    page: number = 1
+  ): Promise<any> {
+    return get(`subject/${id}/blogs`, {
+      page
+    });
+  }
 
   /**
    * 章节信息

@@ -2,20 +2,21 @@
   <ul class="blog__list">
     <li v-for="(item, index) in blogs"
         :key="index"
-        class="blog__item"
-        @click="enterBlog(item)">
+        class="blog__item">
       <div class="blog__hd">
         <div class="blog__avatar">
           <img width="100%"
                height="100%"
-               :src="item.user.avatar.small">
+               :src="getAvatar(item)">
         </div>
         <span class="blog__user">{{ item.user.nickname }}</span>
         <span class="blog__time">{{ item.dateline }}</span>
       </div>
-      <div class="blog__title">{{ item.title }}</div>
-      <div class="blog__content"
-           v-html="item.summary"></div>
+      <div @click="enterBlog(item)">
+        <div class="blog__title">{{ item.title }}</div>
+        <div class="blog__content"
+             v-html="item.summary"></div>
+      </div>
     </li>
   </ul>
 </template>
@@ -25,8 +26,14 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
 export default class SubjectBlog extends Vue {
-  @Prop({ type: Array, default: [] })
+  @Prop({ type: Array, default: () => [] })
   blogs!: Array<Types.ISubjectBlog>;
+
+  getAvatar(item: Types.ISubjectBlog): string {
+    const avatar = item.user.avatar;
+
+    return typeof avatar === 'string' ? avatar : avatar.small;
+  }
 
   enterBlog(item: Types.ISubjectBlog) {
     this.$emit('on-click', item);
@@ -40,6 +47,11 @@ export default class SubjectBlog extends Vue {
     max-height: 150px;
     margin-bottom: 15px;
     line-height: 1.4em;
+    padding-top: 8px;
+
+    & ~ & {
+      border-top: 1px solid #efefef;
+    }
   }
 
   &__hd {

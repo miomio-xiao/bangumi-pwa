@@ -35,7 +35,8 @@
         </ul>
       </div>
 
-      <div class="comments">
+      <div class="comments"
+           v-if="comments.length">
         <div class="comments__title">评论</div>
         <Comments :list="comments" />
       </div>

@@ -74,7 +74,12 @@
         </div>
       </div>
       <div class="blog">
-        <h3 class="sub">长评</h3>
+        <h3 class="sub">
+          长评
+          <v-icon v-if="subject.blog.length >= 5"
+                  style="float: right"
+                  @click="enterBlogListPage">keyboard_arrow_right</v-icon>
+        </h3>
         <SubjectBlog :blogs="subject.blog"
                      @on-click="enterBlogPage"
                      v-if="subject.blog" />
@@ -207,6 +212,17 @@ export default class Subjects extends Vue {
 
   enterCommentPage() {
     this.$router.push(`/comments/${this.id}`);
+  }
+
+  enterBlogListPage() {
+    const id = this.id;
+    this.$router.push({
+      name: 'blogs',
+      params: {
+        id: id + '',
+        name: this.subject.name_cn || this.subject.name
+      }
+    });
   }
 
   async enterBlogPage(item: Types.ISubjectBlog) {
