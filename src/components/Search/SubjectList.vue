@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { Prop, Component, Vue } from 'vue-property-decorator';
-import Rate from './Rate.vue';
+import Rate from '@/components/Rate.vue';
 
 @Component({
   components: {

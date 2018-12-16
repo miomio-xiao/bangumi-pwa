@@ -1,9 +1,10 @@
 <template>
-  <div class="search-page">
+  <div class="search page">
     <Header hasBack
             relative>
       <v-text-field append-icon="search"
-                    class="input"
+                    class="search__input"
+                    color="#fff"
                     hide-details
                     single-line
                     v-model="keyword"
@@ -12,7 +13,7 @@
     </Header>
     <loading v-if="loading"
              :full="true" />
-    <div class="search-content"
+    <div class="search__content"
          v-else-if="list.length > 0">
       <Scroll ref="scroll"
               :pullUpLoad="pullUpLoadObj"
@@ -20,31 +21,19 @@
         <SearchSubjectList :list="list" />
       </Scroll>
     </div>
-    <div class="history"
-         v-else-if="searchItems.length > 0 && !keyword">
-      <div class="history__hd">
-        <span class="history__title">历史搜索</span>
-        <v-icon class="history__clear"
-                @click="clearHistory">delete</v-icon>
-      </div>
-      <ul class="history__items">
-        <li class="history__item"
-            v-for="item in searchItems"
-            :key="item"
-            @click="clickHistory(item)">
-          <v-chip label
-                  color="accent"
-                  text-color="#fff">{{ item }}</v-chip>
-        </li>
-      </ul>
-    </div>
+    <SearchHistory v-else-if="searchItems.length > 0 && !keyword"
+                   class="search__history"
+                   :search-items="searchItems"
+                   @click-item="clickHistory"
+                   @clear-all="clearHistory" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import Header from '@/components/Header/index.vue';
-import SearchSubjectList from '@/components/SearchSubjectList.vue';
+import SearchSubjectList from '@/components/Search/SubjectList.vue';
+import SearchHistory from '@/components/Search/History.vue';
 import { debounce } from '@/utils/decorator';
 import api from '@/api';
 
@@ -56,6 +45,7 @@ import Scroll from '@/components/scroll';
   components: {
     Header,
     SearchSubjectList,
+    SearchHistory,
     Scroll
   }
 })
@@ -218,47 +208,19 @@ export default class Search extends Vue {
 </script>
 
 <style lang="stylus" scoped>
-.search-page {
-  .input {
-    padding-top: 0 !important;
-    color: #fff !important;
+.search {
+  &__input {
+    padding-top: 0;
   }
 
-  .search-content {
+  &__content {
     width: 100%;
     height: calc(100vh - 48px);
     padding: 4px;
   }
 
-  .history {
+  &__history {
     margin-top: 12px;
-
-    &__hd {
-      display: flex;
-      font-size: 18px;
-      padding: 8px 16px;
-      text-align: left;
-      color: #909090;
-      font-weight: normal;
-    }
-
-    &__title {
-      flex: 1;
-    }
-
-    &__clear {
-      flex: 0 0 40px;
-    }
-
-    &__items {
-      display: flex;
-      padding: 10px;
-    }
-
-    &__item {
-      margin: 0 6px;
-      font-size: 18px;
-    }
   }
 }
 </style>
