@@ -24,25 +24,26 @@ import BScroll from 'better-scroll';
 import WeekdaySubjectItem from './WeekdaySubjectItem.vue';
 
 @Component({
+  name: 'WeekdayCard',
   components: {
     WeekdaySubjectItem
   }
 })
 export default class WeekdayCard extends Vue {
   @Prop()
-  calendar!: Types.ICalendar
+  calendar!: Types.ICalendar;
 
-  private scroll!: BScroll
+  private scroll!: BScroll;
 
   get title() {
-    return this.calendar.weekday.en;
+    return this.calendar.weekday.cn;
   }
 
   get listStyles() {
     const width = this.calendar.items.length * 120;
     return {
       width: width + 'px'
-    }
+    };
   }
 
   mounted() {
@@ -53,28 +54,28 @@ export default class WeekdayCard extends Vue {
         eventPassthrough: 'vertical',
         click: true
       });
-    })
+    });
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="stylus" scoped>
 .weekday-card {
   margin: 0;
   overflow: hidden;
 }
 header {
   padding: 0 10px;
-  border-left: 4px solid pink;
+  border-left: 4px solid $primary-color;
   text-align: left;
-  margin: 0 0 15px;
+  margin: 0 0 10px;
   .weekday__title {
     display: inline-block;
     min-width: 4em;
     margin: 0;
     padding-left: 0;
     padding-bottom: 0;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: normal;
     color: #111;
   }

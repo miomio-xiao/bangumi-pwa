@@ -3,9 +3,7 @@
     <div class="charactor__poster"
          v-lazy:background-image="image">
     </div>
-    <span class="charactor__name">{{ charactor.name }}</span>
-    <span class="charactor__name charactor__name--cn"
-          v-if="charactor.name_cn && charactor.name !== charactor.name_cn">{{ charactor.name_cn }}</span>
+    <span class="charactor__name">{{ charactor.name_cn || charactor.name }}</span>
     <div class="charactor__actor">
       CV:
       <span>{{ cv || '暂无信息' }}</span>
@@ -16,7 +14,9 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-@Component
+@Component({
+  name: 'CharactorCard'
+})
 export default class CharactorCard extends Vue {
   @Prop({ type: Object, default: [] })
   charactor!: Types.ISubjectCharactor;
@@ -29,23 +29,33 @@ export default class CharactorCard extends Vue {
   }
 
   get image(): string {
-    return this.charactor.images.grid || '';
+    if (this.charactor.images) {
+      return (
+        this.charactor.images.large ||
+        this.charactor.images.small ||
+        this.charactor.images.grid ||
+        ''
+      );
+    }
+
+    return '';
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="stylus" scoped>
 .charactor {
   display: inline-block;
   vertical-align: top;
-  width: 80px;
+  width: 100px;
   margin: 4px;
   text-align: center;
+
   &__poster {
-    width: 100%;
-    height: 80px;
+    width: 100px;
+    height: 150px;
     overflow: hidden;
-    background-size: cover;
+    background-size: contain;
     background-position: center;
   }
 
@@ -56,13 +66,7 @@ export default class CharactorCard extends Vue {
     font-size: 14px;
     line-height: 1.2em;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    word-wrap: normal;
     color: #111;
-    &--cn {
-      white-space: normal;
-    }
   }
 
   &__actor {

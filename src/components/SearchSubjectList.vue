@@ -11,8 +11,8 @@
                :style="{ backgroundImage: `url(${item.images ? (item.images.large || item.images.common || '') : ''})` }"></div>
           <div class="subject__infos">
             <div class="subject__title">
-              <span class="subject__name--cn">{{ item.name_cn || '' }}</span>
-              <span class="subject__name">{{ item.name || '' }}</span>
+              <span class="subject__name--cn ellipsis">{{ item.name_cn || '' }}</span>
+              <span class="subject__name ellipsis">{{ item.name || '' }}</span>
             </div>
             <div class="subject__keywords">
               {{ item.summary }}
@@ -41,8 +41,8 @@ import Rate from './Rate.vue';
   }
 })
 export default class SearchSubjectList extends Vue {
-  @Prop({ type: Array, default: [] })
-  list!: Array<any>;
+  @Prop({ default: () => [] })
+  list!: Types.ISubject[];
 
   enter(id: number | string) {
     this.$router.push(`/subject/${id}`);
@@ -50,19 +50,18 @@ export default class SearchSubjectList extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-$fontSize: 14px;
-
+<style lang="stylus" scoped>
 .subject-list {
   padding-top: 6px;
 }
 
 .module {
   margin: 10px 0;
+
   &__title {
     padding: 5px;
     font-size: 16px;
-    color: #555;
+    color: #323232;
     text-align: left;
   }
 }
@@ -75,6 +74,7 @@ $fontSize: 14px;
   margin: 0 4px 10px 4px;
   border-bottom: 1px solid #e5e5e5;
   text-align: center;
+
   &__poster {
     flex: 0 0 100px;
     height: 140px;
@@ -86,14 +86,16 @@ $fontSize: 14px;
   &__infos {
     position: relative;
     flex: 1;
+    width: 250px;
     margin-left: 12px;
+    padding-right: 8px;
     text-align: left;
   }
 
   &__title {
     text-align: left;
     max-width: 100%;
-    font-size: $fontSize;
+    font-size: 12px;
     line-height: 1.4em;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -103,26 +105,38 @@ $fontSize: 14px;
 
   &__name {
     display: block;
-    font-size: 14px;
-    color: #ccc;
+    width: 200px;
+    font-size: 10px;
+    color: #909090;
   }
 
   &__name--cn {
     display: block;
-    font-size: 16px;
-    color: #111;
+    width: 200px;
+    font-size: 14px;
+    color: #323232;
   }
 
   &__keywords {
-    margin: 8px 0;
-    max-height: 3em;
+    display: -webkit-box;
+    white-space: normal;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    margin-top: 8px;
+    padding-right: 12px;
+    max-height: 6em;
+    font-size: 10px;
+    line-height: 1.6;
     overflow: hidden;
+    color: #646464;
   }
 
   &__rating {
-    font-size: 12px;
+    font-size: 10px;
+    height: 14px;
     line-height: 14px;
-    color: #aaa;
+    color: #909090;
+    margin-top: 15px;
   }
 
   &__rank {
@@ -130,9 +144,10 @@ $fontSize: 14px;
     top: 0;
     right: 12px;
     width: 40px;
-    height: 18px;
-    border-radius: 4px;
-    line-height: 18px;
+    height: 16px;
+    border-radius: 10px;
+    font-size: 12px;
+    line-height: 16px;
     text-align: center;
     color: #fff;
     background: pink;

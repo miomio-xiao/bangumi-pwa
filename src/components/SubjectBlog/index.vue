@@ -34,18 +34,18 @@ export default class SubjectBlog extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="stylus" scoped>
 .blog {
   &__item {
-    height: 150px;
-    margin-bottom: 10px;
+    max-height: 150px;
+    margin-bottom: 15px;
     line-height: 1.4em;
-    box-shadow: 0px 2px 1px -1px rgba(180, 160, 120, 0.6);
   }
 
   &__hd {
     display: flex;
-    padding-bottom: 6px;
+    align-items: center;
+    padding-bottom: 10px;
   }
 
   &__avatar {
@@ -58,7 +58,7 @@ export default class SubjectBlog extends Vue {
 
   &__title {
     font-size: 16px;
-    color: rgba(0, 0, 0, 0.87);
+    color: #323232;
     text-overflow: ellipsis;
     white-space: nowrap;
     word-wrap: normal;
@@ -69,12 +69,14 @@ export default class SubjectBlog extends Vue {
     flex: 1;
     align-self: center;
     padding-left: 10px;
-    color: #bd4147;
+    font-size: 14px;
+    color: #000;
   }
 
   &__time {
     flex: 0 0 auto;
-    color: #ccc;
+    font-size: 12px;
+    color: #909090;
   }
 
   &__content {
@@ -82,12 +84,12 @@ export default class SubjectBlog extends Vue {
     white-space: normal;
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
-    padding-top: 4px;
+    padding-top: 8px;
     font-size: 12px;
     line-height: 1.4em;
-    height: 90px;
+    max-height: 90px;
     overflow: hidden;
-    color: #888;
+    color: #646464;
   }
 }
 </style>

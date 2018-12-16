@@ -13,10 +13,17 @@ import 'echarts/lib/theme/light';
 
 import App from './App.vue';
 import router from './router';
+
 import './registerServiceWorker.ts';
-import 'vuetify/dist/vuetify.min.css';
+// import 'vuetify/dist/vuetify.min.css';
+import { theme } from './styles/theme';
+import 'material-design-icons-iconfont/dist/material-design-icons.css';
+import './styles/index.styl';
+import 'reset-css';
 
 import VueLazyload from 'vue-lazyload';
+import Loading from '@/components/Loading.vue';
+
 Vue.use(VueLazyload, {
   preLoad: 1.3,
   error: require('@/assets/imgs/404.jpg'),
@@ -26,7 +33,10 @@ Vue.use(VueLazyload, {
 
 Vue.config.productionTip = false;
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+  theme
+});
+Vue.component('loading', Loading);
 Vue.component('chart', ECharts);
 
 new Vue({

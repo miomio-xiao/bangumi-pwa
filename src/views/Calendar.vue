@@ -1,14 +1,5 @@
 <template>
   <div class="page">
-    <v-toolbar dark
-               color="pink">
-      <h1 class="page__title">{{ title }}</h1>
-      <v-spacer></v-spacer>
-      <v-btn icon
-             to="/search">
-        <v-icon>search</v-icon>
-      </v-btn>
-    </v-toolbar>
     <ul class="calendar">
       <li v-for="(calendar, i) in calendars"
           :key="i"
@@ -33,7 +24,7 @@ import WeekdayCard from '@/components/WeekdayCard/index.vue';
 })
 export default class Calendar extends Vue {
   private title: string = 'bangumi';
-  private calendars: Array<Types.ICalendar> = [];
+  private calendars: Types.ICalendar[] = [];
 
   async created() {
     try {
@@ -46,9 +37,8 @@ export default class Calendar extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="stylus" scoped>
 .calendar {
-  background: #f5f5f5;
   &__list {
     flex: 1;
     margin-bottom: 10px;
