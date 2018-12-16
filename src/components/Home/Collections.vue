@@ -2,9 +2,12 @@
   <div class="collection">
     <div v-ripple
          class="collection-card"
-         v-for="item in list"
+         v-for="item in collectionList"
          :key="item.text"
          @click="enter(item)">
+      <div class="collection-card__post"
+           :style="getPostStyle(item)">
+      </div>
       <div class="collection-card__title">{{ item.text }}</div>
     </div>
   </div>
@@ -12,6 +15,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import api from '@/api';
 
 interface CollectionCard {
   text: string;
@@ -21,44 +25,82 @@ interface CollectionCard {
     type?: string;
     sort?: string;
   };
+
+  cover?: string;
 }
 
 @Component({
   name: 'Collections'
 })
 export default class Collections extends Vue {
-  list: CollectionCard[] = [
+  collectionList: CollectionCard[] = [
     {
       text: 'TOP 100',
-      href: '/rank'
+      href: '/rank',
+      cover: ''
     },
     {
       text: '2018 年度番组',
       href: '/browser',
       params: {
         airtime: '2018'
-      }
+      },
+      cover: ''
     },
     {
       text: '2018 秋季番组',
       href: '/browser',
       params: {
         airtime: '2018-10'
-      }
+      },
+      cover: ''
     },
     {
       text: '2018 夏季番组',
       href: '/browser',
       params: {
         airtime: '2018-7'
-      }
+      },
+      cover: ''
     }
   ];
+
+  getPostStyle(item: CollectionCard) {
+    if (item.cover) {
+      return { backgroundImage: `url(${item.cover})` };
+    }
+
+    return {};
+  }
 
   enter(item: CollectionCard) {
     const query: any = item.params || {};
     query.title = item.text;
     this.$router.push({ path: item.href, query });
+  }
+
+  async fetch() {
+    const airtimeList = this.collectionList.map(item => {
+      const params = item.params || {};
+      return params.airtime || '';
+    });
+
+    const browserCollectionList = await api.getBrowserCollection(
+      airtimeList,
+      1
+    );
+
+    for (let [index, item] of Object.entries(this.collectionList)) {
+      const topList: Types.IBrowserInfo[] = browserCollectionList[index];
+
+      if (topList && topList.length) {
+        item.cover = topList[0].cover.replace(/(cover\/)(.*?)(\/)/, '$1l$3');
+      }
+    }
+  }
+
+  created() {
+    this.fetch();
   }
 }
 </script>
@@ -70,26 +112,29 @@ export default class Collections extends Vue {
 
 .collection-card {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
   margin-bottom: 12px;
   border-radius: 2px;
   padding: 4px 8px 12px 8px;
-  height: 120px;
-  background-image: linear-gradient(to bottom right, #f73e53, #ff8b62);
+  height: 150px;
 
-  &:nth-of-type(1) {
-    background-image: linear-gradient(to bottom right, #f73e53, #ff5722);
-  }
-
-  &:nth-of-type(2n) {
-    background-image: linear-gradient(to bottom right, #f73e53, #f09199);
+  &__post {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex: 0 0 120px;
+    background-color: #efefef;
+    background-size: cover;
+    background-position: center;
   }
 
   &__title {
-    font-size: 24px;
-    color: #fff;
-    font-weight: 400;
+    padding: 4px 0 0 6px;;
+    font-size: 16px;
+    color: #464646;
+    background: #fafafa;
   }
 }
 </style>

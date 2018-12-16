@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs';
 
 // axios 配置
 const instance = axios.create({
@@ -11,7 +12,11 @@ const instance = axios.create({
   }
 });
 
-export function post(url: string, params:Object = {}, queryParams:Object = {}) {
+export function post(
+  url: string,
+  params: Object = {},
+  queryParams: Object = {}
+) {
   return new Promise<any>((resolve, reject) => {
     instance({
       method: 'post',
@@ -33,7 +38,10 @@ export function get(url: string, params: Object = {}) {
     instance({
       method: 'get',
       url,
-      params: params
+      params: params,
+      paramsSerializer: function(params) {
+        return qs.stringify(params, { arrayFormat: 'repeat' });
+      }
     })
       .then(response => {
         resolve(response.data);

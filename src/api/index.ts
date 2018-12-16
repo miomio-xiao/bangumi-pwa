@@ -9,6 +9,16 @@ export default class Api {
   }
 
   /**
+   * 榜单集合
+   */
+  public static async getBrowserCollection(
+    airtimeList: string[],
+    num: number
+  ): Promise<any> {
+    return get(`browser-collection`, { airtime: airtimeList, num });
+  }
+
+  /**
    * Top rank
    */
   public static async getTopRanks(num: number): Promise<any> {
@@ -26,12 +36,10 @@ export default class Api {
   }: {
     type?: string;
     airtime?: string;
-    page: number;
-    sort: string;
+    page?: number;
+    sort?: string;
   }): Promise<any> {
-    const url = `browser/${type}/${
-      airtime ? airtime + '/' : ''
-    }`;
+    const url = `browser/${type}/${airtime ? airtime + '/' : ''}`;
     return get(url, {
       page,
       sort
@@ -81,7 +89,7 @@ export default class Api {
       page
     });
   }
-  
+
   /**
    * 条目全部长评
    *
