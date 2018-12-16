@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
 interface CollectionCard {
   text: string;
@@ -24,33 +24,33 @@ interface CollectionCard {
 }
 
 @Component({
-  name: "Collections"
+  name: 'Collections'
 })
 export default class Collections extends Vue {
   list: CollectionCard[] = [
     {
-      text: "TOP 100",
-      href: "/rank"
+      text: 'TOP 100',
+      href: '/rank'
     },
     {
-      text: "2018 年度番组",
-      href: "/browser",
+      text: '2018 年度番组',
+      href: '/browser',
       params: {
-        airtime: "2018"
+        airtime: '2018'
       }
     },
     {
-      text: "2018 秋季番组",
-      href: "/browser",
+      text: '2018 秋季番组',
+      href: '/browser',
       params: {
-        airtime: "2018-10"
+        airtime: '2018-10'
       }
     },
     {
-      text: "2018 夏季番组",
-      href: "/browser",
+      text: '2018 夏季番组',
+      href: '/browser',
       params: {
-        airtime: "2018-7"
+        airtime: '2018-7'
       }
     }
   ];
