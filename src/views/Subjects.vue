@@ -76,7 +76,7 @@
       <div class="blog">
         <h3 class="sub">
           长评
-          <v-icon v-if="subject.blog.length >= 5"
+          <v-icon v-if="subject.blog && subject.blog.length >= 5"
                   style="float: right"
                   @click="enterBlogListPage">keyboard_arrow_right</v-icon>
         </h3>
