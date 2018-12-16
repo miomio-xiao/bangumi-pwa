@@ -14,7 +14,7 @@ import { debounce } from '@/utils/decorator';
 
 @Component
 export default class App extends Vue {
-  private caches: Array<string> = ['home', 'calendar'];
+  caches: string[] = ['home', 'rank'];
 
   @debounce(200)
   onScroll() {

@@ -57,7 +57,7 @@ import api from '@/api';
 import Scroll from '@/components/scroll';
 
 @Component({
-  name: 'Browser',
+  name: 'browser',
   components: {
     Loading,
     Header,

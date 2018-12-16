@@ -15,14 +15,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
-import api from "@/api";
-import Loading from "@/components/Loading.vue";
-import Header from "@/components/Header/index.vue";
-import BrowserList from "@/components/Browser/List.vue";
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import api from '@/api';
+import Loading from '@/components/Loading.vue';
+import Header from '@/components/Header/index.vue';
+import BrowserList from '@/components/Browser/List.vue';
 
 @Component({
-  name: "Rank",
+  name: 'rank',
   components: {
     Loading,
     Header,
@@ -30,7 +30,7 @@ import BrowserList from "@/components/Browser/List.vue";
   }
 })
 export default class Rank extends Vue {
-  title: string = "Top 100";
+  title: string = 'Top 100';
   rankList: Types.IBrowserInfo[] = [];
   loading: boolean = false;
 
