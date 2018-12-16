@@ -14,8 +14,8 @@
     <slot>
       <h1 class="page__title ellipsis">{{ title }}</h1>
     </slot>
+    <v-spacer v-if="$slots.tail"></v-spacer>
     <slot name="tail">
-      <v-spacer v-if="hasSearch"></v-spacer>
       <v-btn icon
              to="/search"
              v-if="hasSearch">
