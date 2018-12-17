@@ -37,7 +37,14 @@ export default class Collections extends Vue {
     {
       text: 'TOP 100',
       href: '/rank',
-      cover: ''
+      cover: '',
+      params: {
+        airtime: ''
+      }
+    },
+    {
+      text: '标签浏览',
+      href: '/tag'
     },
     {
       text: '2018 年度番组',
@@ -65,6 +72,12 @@ export default class Collections extends Vue {
     }
   ];
 
+  get airtimeCollectionList(): CollectionCard[] {
+    return this.collectionList.filter(
+      item => item.params && item.params.hasOwnProperty('airtime')
+    );
+  }
+
   getPostStyle(item: CollectionCard) {
     if (item.cover) {
       return { backgroundImage: `url(${item.cover})` };
@@ -80,7 +93,7 @@ export default class Collections extends Vue {
   }
 
   async fetch() {
-    const airtimeList = this.collectionList.map(item => {
+    const airtimeList = this.airtimeCollectionList.map(item => {
       const params = item.params || {};
       return params.airtime || '';
     });
@@ -90,7 +103,7 @@ export default class Collections extends Vue {
       1
     );
 
-    for (let [index, item] of Object.entries(this.collectionList)) {
+    for (let [index, item] of Object.entries(this.airtimeCollectionList)) {
       const topList: Types.IBrowserInfo[] = browserCollectionList[index];
 
       if (topList && topList.length) {
@@ -131,7 +144,7 @@ export default class Collections extends Vue {
   }
 
   &__title {
-    padding: 4px 0 0 6px;;
+    padding: 4px 0 0 6px;
     font-size: 16px;
     color: #464646;
     background: #fafafa;

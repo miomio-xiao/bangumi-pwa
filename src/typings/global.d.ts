@@ -33,4 +33,9 @@ export interface ISearchOptions {
   max_results?: number;
 }
 
+export interface ITag {
+  text: string;
+  num: number;
+}
+
 export type kvObject = { name: string; value: any };

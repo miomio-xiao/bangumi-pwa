@@ -57,6 +57,12 @@ export default new Router({
       name: 'rank',
       component: () =>
         import(/* webpackChunkName: "Rank" */ './views/Rank.vue')
+    },
+    {
+      path: '/tag',
+      name: 'tag',
+      component: () =>
+        import(/* webpackChunkName: "Tag" */ './views/Tag.vue')
     }
   ]
 });

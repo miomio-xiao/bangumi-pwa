@@ -21,6 +21,22 @@ export default class Api {
   /**
    * Top rank
    */
+  public static async getTagList({
+    page = 1,
+    type
+  }: {
+    page?: number;
+    type?: 'all' | undefined;
+  }): Promise<any> {
+    return get(`tag`, {
+      page,
+      type
+    });
+  }
+
+  /**
+   * Top rank
+   */
   public static async getTopRanks(num: number): Promise<any> {
     return get(`rank/${num}`);
   }
