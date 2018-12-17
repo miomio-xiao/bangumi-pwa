@@ -35,16 +35,17 @@ interface CollectionCard {
 export default class Collections extends Vue {
   collectionList: CollectionCard[] = [
     {
+      text: '标签浏览',
+      href: '/tag',
+      cover: '//lain.bgm.tv/pic/cover/l/9e/3c/12426_AoHT9.jpg'
+    },
+    {
       text: 'TOP 100',
       href: '/rank',
       cover: '',
       params: {
         airtime: ''
       }
-    },
-    {
-      text: '标签浏览',
-      href: '/tag'
     },
     {
       text: '2018 年度番组',
@@ -106,7 +107,7 @@ export default class Collections extends Vue {
     for (let [index, item] of Object.entries(this.airtimeCollectionList)) {
       const topList: Types.IBrowserInfo[] = browserCollectionList[index];
 
-      if (topList && topList.length) {
+      if (topList && topList.length && !item.cover) {
         item.cover = topList[0].cover.replace(/(cover\/)(.*?)(\/)/, '$1l$3');
       }
     }

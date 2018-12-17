@@ -7,13 +7,16 @@
           @click="enter(item.id)"
           :key="item.id">
         <div class="browser__index"
-            v-if="showIndex">No. {{ index + 1 }}</div>
+             v-if="showIndex">No. {{ index + 1 }}</div>
         <div class="browser__content">
           <div class="avator"
-              v-lazy:background-image="getCover(item)">
+               v-lazy:background-image="getCover(item)">
           </div>
           <div class="browser__detail">
-            <div class="browser__title">{{ item.name || item.oName }}</div>
+            <div class="browser__title"
+                 :class="{'browser__title--short': !showIndex}">
+              {{ item.name || item.oName }}
+            </div>
             <div class="browser__info">{{ item.info }}</div>
             <div class="browser__rating">
               <template v-if="item.rate">
@@ -27,19 +30,19 @@
           </div>
         </div>
         <div class="browser__rank"
-            v-if="showRank && item.rank">{{ item.rank }}</div>
+             v-if="showRank && item.rank">{{ item.rank }}</div>
       </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
-import Loading from "@/components/Loading.vue";
-import Rate from "@/components/Rate.vue";
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import Loading from '@/components/Loading.vue';
+import Rate from '@/components/Rate.vue';
 
 @Component({
-  name: "BrowserList",
+  name: 'BrowserList',
   components: {
     Loading,
     Rate
@@ -56,7 +59,7 @@ export default class BrowserList extends Vue {
   list!: Types.IBrowserInfo[];
 
   getCover(item: Types.IBrowserInfo): string {
-    return item.cover.replace(/(cover\/)(.*?)(\/)/, "$1c$3");
+    return item.cover.replace(/(cover\/)(.*?)(\/)/, '$1c$3');
   }
 
   getRateNumText(item: Types.IBrowserInfo): string {
@@ -64,7 +67,7 @@ export default class BrowserList extends Vue {
       return `（${item.rateNum}人评分）`;
     }
 
-    return "";
+    return '';
   }
 
   enter(id: number) {
@@ -90,7 +93,6 @@ export default class BrowserList extends Vue {
 
   &__index {
     display: inline-block;
-    margin-bottom: 10px;
     padding: 0 8px;
     line-height: 20px;
     font-size: 10px;
@@ -102,6 +104,7 @@ export default class BrowserList extends Vue {
 
   &__content {
     display: flex;
+    margin-top: 10px;
   }
 
   .avator {
@@ -127,6 +130,10 @@ export default class BrowserList extends Vue {
     font-size: 16px;
     color: #323232;
     font-weight: bold;
+
+    &--short {
+      padding-right: 40px;
+    }
   }
 
   &__info {

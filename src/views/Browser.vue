@@ -37,8 +37,8 @@
               :pullUpLoad="pullUpLoadObj"
               @pullingUp="onPullingUp">
         <BrowserList :list="list"
-                     showRank
-                     showIndex />
+                     :show-rank="showRank"
+                     :show-index="showIndex" />
       </Scroll>
     </div>
     <Loading v-else
@@ -69,6 +69,7 @@ export default class Browser extends Vue {
   loading: boolean = false;
   showRank: boolean = true;
   list: Types.IBrowserInfo[] = [];
+  browserType: string = '';
 
   menu: boolean = false;
   date: string = '';
@@ -77,6 +78,7 @@ export default class Browser extends Vue {
     [key: string]: string;
   } = {};
 
+  tag: string = '';
   title: string = '';
   type: string = '';
   airtime: string = '';
@@ -91,13 +93,34 @@ export default class Browser extends Vue {
     threshold: 20
   };
 
+  get isTagType(): boolean {
+    return this.browserType === 'tag';
+  }
+
+  get showIndex(): boolean {
+    return !this.isTagType;
+  }
+
   get params(): any {
-    return {
+    const baseParams = {
       page: this.page,
       airtime: this.airtime,
-      sort: this.sort,
-      type: this.type
+      sort: this.sort
     };
+
+    const params = this.isTagType
+      ? {
+          tag: this.tag
+        }
+      : {
+          type: this.type
+        };
+
+    return Object.assign(baseParams, params);
+  }
+
+  get fetchApi(): Function {
+    return this.isTagType ? api.getTagBrowserList : api.getBrowserList;
   }
 
   submit() {
@@ -109,6 +132,13 @@ export default class Browser extends Vue {
   }
 
   created() {
+    const routeParams = this.$route.params;
+
+    if (routeParams.tag) {
+      this.browserType = 'tag';
+      this.tag = routeParams.tag;
+    }
+
     this.query = this.$route.query as {
       [key: string]: string;
     };
@@ -150,7 +180,7 @@ export default class Browser extends Vue {
     }
 
     try {
-      const list: Types.IBrowserInfo[] = await api.getBrowserList(this.params);
+      const list: Types.IBrowserInfo[] = await this.fetchApi(this.params);
 
       if (!list.length) {
         this.noMore = true;

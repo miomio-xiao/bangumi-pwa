@@ -6,8 +6,8 @@
     <div class="rank"
          v-if="!loading">
       <BrowserList :list="rankList"
-                   showRank
-                   showIndex />
+                   show-rank
+                   show-index />
     </div>
     <Loading v-else
              :full="true"></Loading>

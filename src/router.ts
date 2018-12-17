@@ -63,6 +63,12 @@ export default new Router({
       name: 'tag',
       component: () =>
         import(/* webpackChunkName: "Tag" */ './views/Tag.vue')
+    },
+    {
+      path: '/tag/:tag',
+      name: 'tagBrowser',
+      component: () =>
+        import(/* webpackChunkName: "Browser" */ './views/Browser.vue')
     }
   ]
 });

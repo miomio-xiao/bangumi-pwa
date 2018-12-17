@@ -1,5 +1,8 @@
 <template>
   <div class="page">
+    <Header hasBack
+            relative
+            :title="title" />
     <div class="tag"
          v-if="!loading">
       <TagCloud :data="tagCloudData"
@@ -63,7 +66,14 @@ export default class Tag extends Vue {
     return this.baseSize + (word.value / this.topNum) * 50;
   }
 
-  onWordClick() {}
+  onWordClick(word: Word) {
+    this.$router.push({
+      path: `tag/${word.text}`,
+      query: {
+        title: `动画标签： ${word.text}`
+      }
+    });
+  }
 
   async mounted() {
     this.loading = true;

@@ -63,6 +63,27 @@ export default class Api {
   }
 
   /**
+   * 动画标签浏览列表
+   */
+  public static async getTagBrowserList({
+    tag,
+    airtime,
+    page = 1,
+    sort
+  }: {
+    tag: string;
+    airtime?: string;
+    page?: number;
+    sort?: string;
+  }): Promise<any> {
+    const url = `tag/${tag}/${airtime ? airtime + '/' : ''}`;
+    return get(url, {
+      page,
+      sort
+    });
+  }
+
+  /**
    * 搜索
    *
    * @static
