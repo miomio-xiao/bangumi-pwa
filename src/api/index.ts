@@ -19,7 +19,7 @@ export default class Api {
   }
 
   /**
-   * Top rank
+   * 动画标签列表
    */
   public static async getTagList({
     page = 1,
@@ -109,6 +109,16 @@ export default class Api {
     return get(`bgm/subject/${id}`, {
       responseGroup
     });
+  }
+  
+  /**
+   * 条目标签信息
+   *
+   */
+  public static async getSubjectTagsById(
+    id: number | string,
+  ): Promise<any> {
+    return get(`subject/${id}/tag`);
   }
 
   /**

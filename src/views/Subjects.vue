@@ -49,6 +49,14 @@
         </div>
       </div>
       <div class="crt">
+        <h3 class="sub">标签</h3>
+        <SubjectTag v-if="tags.length"
+                    :tag-list="tags"
+                    :class="tagClass"
+                    @click-item="enterTagPage"
+                    @click.native.stop="tagMore = !tagMore" />
+      </div>
+      <div class="crt">
         <h3 class="sub">角色</h3>
         <SubjectCharactor v-if="subject.crt"
                           :charactors="subject.crt" />
@@ -123,6 +131,7 @@ import SubjectEp from '@/components/SubjectEp/index.vue';
 import SubjectResource from '@/components/SubjectResource/index.vue';
 import SubjectBlog from '@/components/SubjectBlog/index.vue';
 import SubjectComments from '@/components/SubjectComments/index.vue';
+import SubjectTag from '@/components/SubjectTag/index.vue';
 import SubjectChart from '@/components/SubjectChart/index.vue';
 import api from '@/api';
 
@@ -137,6 +146,7 @@ import api from '@/api';
     SubjectEp,
     SubjectResource,
     SubjectBlog,
+    SubjectTag,
     SubjectComments
   }
 })
@@ -144,6 +154,7 @@ export default class Subjects extends Vue {
   id: string = '';
   subject!: Types.ISubject;
   comments: Types.ISubjectComment[] = [];
+  tags: Types.ITag[] = [];
   siteList: Types.ISubjectResourceInfo[] = [];
 
   loading: boolean = false;
@@ -152,6 +163,7 @@ export default class Subjects extends Vue {
   showRank: boolean = false;
   showStaffsDetail: boolean = false;
   summaryMore: boolean = false;
+  tagMore: boolean = false;
 
   title: string = '详情';
 
@@ -202,6 +214,13 @@ export default class Subjects extends Vue {
     return this.changeStr(str);
   }
 
+  get tagClass() {
+    return {
+      more: !this.tagMore,
+      tag: true
+    };
+  }
+
   changeStr(str: string): string {
     return str.replace(/\n|\r\n/g, '<br/>');
   }
@@ -225,7 +244,7 @@ export default class Subjects extends Vue {
     });
   }
 
-  async enterBlogPage(item: Types.ISubjectBlog) {
+  enterBlogPage(item: Types.ISubjectBlog) {
     const id = item.id;
     this.$router.push({
       name: 'Blog',
@@ -236,8 +255,25 @@ export default class Subjects extends Vue {
     });
   }
 
+  enterTagPage(item: Types.ITag) {
+    if (!this.tagMore) {
+      return;
+    }
+
+    this.$router.push({
+      path: `/tag/${item.text}`,
+      query: {
+        title: `动画标签： ${item.text}`
+      }
+    });
+  }
+
   showSheet() {
     this.showChart = true;
+  }
+
+  async fetchTags() {
+    this.tags = await api.getSubjectTagsById(this.id);
   }
 
   async fetchComments() {
@@ -265,6 +301,7 @@ export default class Subjects extends Vue {
     }
 
     this.fetchComments();
+    this.fetchTags();
     this.fetchSiteList();
   }
 }
@@ -385,6 +422,10 @@ export default class Subjects extends Vue {
     }
   }
 
+  .tag {
+    margin-top: -20px;
+  }
+
   .crt {
     margin-top: 12px;
   }
@@ -415,6 +456,10 @@ export default class Subjects extends Vue {
       height: 25px;
       background: linear-gradient(rgba(255, 255, 255, 0.001), #fff);
       pointer-events: none;
+    }
+
+    &.tag {
+      max-height: 90px;
     }
   }
 }
