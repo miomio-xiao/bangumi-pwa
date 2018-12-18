@@ -48,13 +48,13 @@
           暂无更多信息
         </div>
       </div>
-      <div class="crt">
+      <div class="crt"
+           @click="tagMore = !tagMore">
         <h3 class="sub">标签</h3>
         <SubjectTag v-if="tags.length"
                     :tag-list="tags"
                     :class="tagClass"
-                    @click-item="enterTagPage"
-                    @click.native.stop="tagMore = !tagMore" />
+                    @click-item="enterTagPage" />
       </div>
       <div class="crt">
         <h3 class="sub">角色</h3>
