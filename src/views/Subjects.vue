@@ -136,7 +136,7 @@ import SubjectChart from '@/components/SubjectChart/index.vue';
 import api from '@/api';
 
 @Component({
-  name: 'subjects',
+  name: 'subject',
   components: {
     Rate,
     Loading,
@@ -152,13 +152,19 @@ import api from '@/api';
 })
 export default class Subjects extends Vue {
   id: string = '';
-  subject!: Types.ISubject;
+  subject: Types.ISubject = {
+    id: 0,
+    type: '',
+    name: '',
+    url: '',
+    air_date: '',
+    images: {}
+  };
   comments: Types.ISubjectComment[] = [];
   tags: Types.ITag[] = [];
   siteList: Types.ISubjectResourceInfo[] = [];
 
   loading: boolean = false;
-  showComments: boolean = false;
   showChart: boolean = false;
   showRank: boolean = false;
   showStaffsDetail: boolean = false;
@@ -260,6 +266,8 @@ export default class Subjects extends Vue {
       return;
     }
 
+    this.tagMore = !this.tagMore;
+
     this.$router.push({
       path: `/tag/${item.text}`,
       query: {
@@ -285,11 +293,22 @@ export default class Subjects extends Vue {
   }
 
   async fetchSubject() {
-    this.subject = await api.getSubjectById(this.id, 'large');
+    const subject = await api.getSubjectById(this.id, 'large');
+
+    this.subject = subject;
   }
 
-  async created() {
+  async init() {
     this.loading = true;
+    this.tags = [];
+    this.comments = [];
+    this.siteList = [];
+    this.showChart = false;
+    this.showRank = false;
+    this.showStaffsDetail = false;
+    this.summaryMore = false;
+    this.tagMore = false;
+
     this.id = this.$route.params.id;
 
     try {
@@ -303,6 +322,14 @@ export default class Subjects extends Vue {
     this.fetchComments();
     this.fetchTags();
     this.fetchSiteList();
+  }
+
+  activated() {
+    const id = this.$route.params.id;
+    if (id !== this.id) {
+      this.id = id;
+      this.init();
+    }
   }
 }
 </script>
