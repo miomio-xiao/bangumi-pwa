@@ -29,23 +29,35 @@ interface CollectionCard {
   cover?: string;
 }
 
+const collectionList: CollectionCard[] = [
+  {
+    text: '标签浏览',
+    href: '/tag',
+    cover: '//lain.bgm.tv/pic/cover/l/9e/3c/12426_AoHT9.jpg'
+  },
+  {
+    text: 'TOP 100',
+    href: '/rank',
+    cover: '',
+    params: {
+      airtime: ''
+    }
+  }
+];
+
 @Component({
   name: 'Collections'
 })
 export default class Collections extends Vue {
   collectionList: CollectionCard[] = [
+    ...collectionList,
     {
-      text: '标签浏览',
-      href: '/tag',
-      cover: '//lain.bgm.tv/pic/cover/l/9e/3c/12426_AoHT9.jpg'
-    },
-    {
-      text: 'TOP 100',
-      href: '/rank',
-      cover: '',
+      text: '2018 冬季番组',
+      href: '/browser',
       params: {
-        airtime: ''
-      }
+        airtime: '2019-1'
+      },
+      cover: ''
     },
     {
       text: '2018 年度番组',
@@ -68,6 +80,22 @@ export default class Collections extends Vue {
       href: '/browser',
       params: {
         airtime: '2018-7'
+      },
+      cover: ''
+    },
+    {
+      text: '2018 春季番组',
+      href: '/browser',
+      params: {
+        airtime: '2018-4'
+      },
+      cover: ''
+    },
+    {
+      text: '2017 冬季番组',
+      href: '/browser',
+      params: {
+        airtime: '2018-1'
       },
       cover: ''
     }
