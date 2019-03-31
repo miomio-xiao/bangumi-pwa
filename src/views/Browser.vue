@@ -2,6 +2,7 @@
   <div class="page">
     <Header hasBack
             relative
+            :showTitle="showTitle"
             :title="title">
       <v-menu ref="menu"
               v-if="this.airtime"
@@ -30,6 +31,11 @@
                  @click="submit">确定</v-btn>
         </v-date-picker>
       </v-menu>
+      <TagInput v-if="isTagType"
+                slot="tail"
+                :tag-name="tag"
+                @searching="onTagInputSearching"
+                @change="onTagInputChange" />
     </Header>
     <div class="browser-scroll"
          v-if="!loading">
@@ -51,6 +57,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import Header from '@/components/Header/index.vue';
 import Loading from '@/components/Loading.vue';
 import BrowserList from '@/components/Browser/List.vue';
+import TagInput from '@/components/Browser/TagInput.vue';
 import api from '@/api';
 
 // @ts-ignore
@@ -62,6 +69,7 @@ import Scroll from '@/components/scroll';
     Loading,
     Header,
     BrowserList,
+    TagInput,
     Scroll
   }
 })
@@ -71,6 +79,7 @@ export default class Browser extends Vue {
   list: Types.IBrowserInfo[] = [];
   browserType: string = '';
 
+  showTitle: boolean = true;
   menu: boolean = false;
   date: string = '';
 
@@ -131,7 +140,30 @@ export default class Browser extends Vue {
     this.init();
   }
 
+  onTagInputSearching (searching: boolean) {
+    this.showTitle = !searching;
+  }
+
+  onTagInputChange(name: string) {
+    this.$router.replace({
+      path: `/tag/${name}`,
+      query: {
+        title: `动画标签： ${name}`
+      }
+    });
+    this.initRouteParams();
+    this.init();
+  }
+
   created() {
+    this.initRouteParams();
+  }
+
+  mounted() {
+    this.init();
+  }
+
+  initRouteParams () {
     const routeParams = this.$route.params;
 
     if (routeParams.tag) {
@@ -149,10 +181,6 @@ export default class Browser extends Vue {
     this.sort = this.query.sort || 'rank';
 
     this.date = this.airtime;
-  }
-
-  mounted() {
-    this.init();
   }
 
   async init() {

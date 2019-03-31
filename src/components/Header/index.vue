@@ -12,7 +12,8 @@
       </v-btn>
     </slot>
     <slot>
-      <h1 class="page__title ellipsis">{{ title }}</h1>
+      <h1 v-if="showTitle"
+          class="page__title ellipsis">{{ title }}</h1>
     </slot>
     <v-spacer v-if="$slots.tail"></v-spacer>
     <slot name="tail">
@@ -33,6 +34,8 @@ import bus from '@/EventBus';
   name: 'Header'
 })
 export default class Header extends Vue {
+  @Prop({ type: Boolean, default: true })
+  showTitle?: boolean;
   @Prop({ type: String, default: 'bangumi' })
   title?: string;
   @Prop({ type: Boolean, default: false })
