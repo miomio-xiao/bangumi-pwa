@@ -52,6 +52,14 @@ export default class Collections extends Vue {
   collectionList: CollectionCard[] = [
     ...collectionList,
     {
+      text: '2019 春季番组',
+      href: '/browser',
+      params: {
+        airtime: '2019-4'
+      },
+      cover: ''
+    },
+    {
       text: '2018 冬季番组',
       href: '/browser',
       params: {
