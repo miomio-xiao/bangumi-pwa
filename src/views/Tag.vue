@@ -4,6 +4,7 @@
             relative
             :title="title" />
     <div class="tag"
+         ref="tag"
          v-if="!loading">
       <TagCloud :data="tagCloudData"
                 :font-size-mapper="fontSizeMapper"
@@ -15,11 +16,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import api from '@/api';
 import Loading from '@/components/Loading.vue';
 import Header from '@/components/Header/index.vue';
 import TagCloud from '@/components/Tag/Cloud.vue';
+import Alloyfinger from 'alloyfinger';
 
 interface Word {
   text: string;
@@ -46,6 +48,9 @@ export default class Tag extends Vue {
   title: string = '标签浏览';
   tagList: Types.ITag[] = [];
   loading: boolean = false;
+  topNum: number = 0;
+  page: number = 1;
+  finger: any = null;
 
   baseSize: number = 12;
   fontSizeMapper: Function = this.fontSizeMapperFn;
@@ -54,12 +59,22 @@ export default class Tag extends Vue {
     return this.tagList.map(({ text, num }) => ({ text, value: num }));
   }
 
-  get topNum(): number {
-    if (this.tagList.length) {
-      return this.tagList[0].num;
+  @Watch('page')
+  async pageChange() {
+    this.loading = true;
+    try {
+      await this.fetch();
+      if (!this.topNum) {
+        this.topNum = this.getTopNum();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.loading = false;
+      this.$nextTick(() => {
+        this.bindEvent();
+      });
     }
-
-    return 0;
   }
 
   fontSizeMapperFn(word: Word): number {
@@ -75,21 +90,49 @@ export default class Tag extends Vue {
     });
   }
 
-  async mounted() {
-    this.loading = true;
-    try {
-      await this.fetch();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      this.loading = false;
+  getTopNum(): number {
+    if (this.tagList.length) {
+      return this.tagList[0].num;
+    }
+
+    return 0;
+  }
+
+  bindEvent() {
+    if (this.finger) {
+      this.finger.destroy();
+    }
+
+    this.finger = new Alloyfinger(this.$refs.tag, {
+      swipe: ({ direction }: { direction: String }) => {
+        switch (direction) {
+          case 'Right':
+            this.page = Math.max(1, this.page - 1);
+            break;
+
+          case 'Left':
+            this.page++;
+          default:
+            break;
+        }
+      }
+    });
+  }
+
+  mounted() {
+    this.pageChange();
+  }
+
+  beforeDestroy() {
+    if (this.finger) {
+      this.finger.destroy();
     }
   }
 
   async fetch() {
-    const data = await api.getTagList({ page: 1, type: 'all' });
+    const data = await api.getTagList({ page: this.page });
 
-    this.tagList = data;
+    this.tagList.splice(0, this.tagList.length, ...data);
   }
 }
 </script>

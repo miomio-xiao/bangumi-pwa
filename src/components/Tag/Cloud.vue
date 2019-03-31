@@ -74,7 +74,7 @@ export default {
       }
 
       const {
-        data,
+        words,
         padding,
         font,
         fontSizeMapper,
@@ -100,7 +100,7 @@ export default {
       const layout = d3Cloud()
         .size([width, height])
         .font(font)
-        .words(data)
+        .words(words)
         .padding(padding)
         .rotate(rotate)
         .fontSize(fontSizeMapper)
@@ -149,8 +149,10 @@ export default {
   },
 
   watch: {
-    data() {
-      this.draw();
+    words() {
+      this.$nextTick(() => {
+        this.draw();
+      });
     }
   },
 
