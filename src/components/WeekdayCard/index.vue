@@ -3,37 +3,42 @@
     <header>
       <h2 class="weekday__title">{{ title }}</h2>
     </header>
-    <div class="wrapper"
-         ref="wrapper">
-      <ul class="weekday__content"
-          :style="listStyles">
-        <li v-for="(item, i) in calendar.items"
-            :key="i"
-            class="item">
-          <WeekdaySubjectItem :subject="item"></WeekdaySubjectItem>
-        </li>
-      </ul>
+    <div class="wrapper">
+      <Scroll ref="scroll"
+              direction="horizontal"
+              eventPassthrough="vertical">
+        <ul class="weekday__content"
+            :style="listStyles">
+          <li v-for="(item, i) in calendar.items"
+              :key="i"
+              class="item">
+            <WeekdaySubjectItem :subject="item"></WeekdaySubjectItem>
+          </li>
+        </ul>
+      </Scroll>
     </div>
   </section>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import BScroll from 'better-scroll';
-
 import WeekdaySubjectItem from './WeekdaySubjectItem.vue';
+
+// @ts-ignore
+import Scroll from '@/components/scroll';
 
 @Component({
   name: 'WeekdayCard',
   components: {
-    WeekdaySubjectItem
+    WeekdaySubjectItem,
+    Scroll
   }
 })
 export default class WeekdayCard extends Vue {
   @Prop()
   calendar!: Types.ICalendar;
 
-  private scroll!: BScroll;
+  scroll!: Scroll;
 
   get title() {
     return this.calendar.weekday.cn;
@@ -48,12 +53,8 @@ export default class WeekdayCard extends Vue {
 
   mounted() {
     this.$nextTick(() => {
-      const wrapper: Element = this.$refs.wrapper as Element;
-      this.scroll = new BScroll(wrapper, {
-        scrollX: true,
-        eventPassthrough: 'vertical',
-        click: true
-      });
+      this.scroll = this.$refs.scroll;
+      this.scroll.initScroll();
     });
   }
 }
@@ -64,11 +65,13 @@ export default class WeekdayCard extends Vue {
   margin: 0;
   overflow: hidden;
 }
+
 header {
   padding: 0 10px;
   border-left: 4px solid $primary-color;
   text-align: left;
   margin: 0 0 10px;
+
   .weekday__title {
     display: inline-block;
     min-width: 4em;
@@ -80,9 +83,11 @@ header {
     color: #111;
   }
 }
+
 .wrapper {
   width: 100vw;
   height: 160px;
+
   .weekday__content {
     position: relative;
     display: flex;

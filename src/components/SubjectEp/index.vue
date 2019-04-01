@@ -22,7 +22,6 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import BScroll from 'better-scroll';
 
 // @ts-ignore
 import Scroll from '@/components/scroll';
