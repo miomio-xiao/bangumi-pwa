@@ -5,7 +5,10 @@
          v-for="item in collectionList"
          :key="item.text"
          @click="enter(item)">
-      <div class="collection-card__post"
+      <div :class="{
+             'sc-loading': !item.cover,
+             'collection-card__post': true
+            }"
            :style="getPostStyle(item)">
       </div>
       <div class="collection-card__title">{{ item.text }}</div>
@@ -45,68 +48,62 @@ const collectionList: CollectionCard[] = [
   }
 ];
 
+const dateMap = {
+  0: '年度',
+  10: '秋季',
+  7: '夏季',
+  4: '春季',
+  1: '冬季'
+};
+
+const dateKeys = [0, 10, 7, 4, 1];
+
+type dateKey = keyof typeof dateMap;
+
+function getDateCollectionList(length: number) {
+  const nowDate = new Date();
+  const nowYear = nowDate.getFullYear();
+  const nowMonth = nowDate.getMonth() + 1;
+
+  let list = [];
+  let keyIdx = 0;
+
+  while (length > 0) {
+    const loopKey = dateKeys[keyIdx % dateKeys.length] as dateKey;
+    let currentYear = nowYear - ~~(keyIdx / dateKeys.length);
+
+    if (nowMonth > loopKey || currentYear < nowYear) {
+      let currentMonth = loopKey;
+      const airtime =
+        currentMonth === 0
+          ? `${currentYear}`
+          : `${currentYear}-${currentMonth}`;
+
+      list.push({
+        text: `${currentYear} ${dateMap[currentMonth]}番组`,
+        href: '/browser',
+        params: {
+          airtime
+        }
+      });
+
+      if (currentMonth !== 0) {
+        length--;
+      }
+    }
+    keyIdx++;
+  }
+
+  return list;
+}
+
 @Component({
   name: 'Collections'
 })
 export default class Collections extends Vue {
   collectionList: CollectionCard[] = [
     ...collectionList,
-    {
-      text: '2019 春季番组',
-      href: '/browser',
-      params: {
-        airtime: '2019-4'
-      },
-      cover: ''
-    },
-    {
-      text: '2018 冬季番组',
-      href: '/browser',
-      params: {
-        airtime: '2019-1'
-      },
-      cover: ''
-    },
-    {
-      text: '2018 年度番组',
-      href: '/browser',
-      params: {
-        airtime: '2018'
-      },
-      cover: ''
-    },
-    {
-      text: '2018 秋季番组',
-      href: '/browser',
-      params: {
-        airtime: '2018-10'
-      },
-      cover: ''
-    },
-    {
-      text: '2018 夏季番组',
-      href: '/browser',
-      params: {
-        airtime: '2018-7'
-      },
-      cover: ''
-    },
-    {
-      text: '2018 春季番组',
-      href: '/browser',
-      params: {
-        airtime: '2018-4'
-      },
-      cover: ''
-    },
-    {
-      text: '2017 冬季番组',
-      href: '/browser',
-      params: {
-        airtime: '2018-1'
-      },
-      cover: ''
-    }
+    ...getDateCollectionList(5)
   ];
 
   get airtimeCollectionList(): CollectionCard[] {
@@ -185,6 +182,29 @@ export default class Collections extends Vue {
     font-size: 16px;
     color: #464646;
     background: #fafafa;
+  }
+}
+
+.sc-loading {
+  position: relative;
+  overflow: hidden;
+  background-color: #E2E2E2;
+
+  &::after {
+    display: block;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: sc-loading 1.5s infinite;
+  }
+}
+
+@keyframes sc-loading {
+  100% {
+    transform: translateX(100%);
   }
 }
 </style>
